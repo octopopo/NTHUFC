@@ -12,5 +12,8 @@ class Photo(models.Model):
     #upload_time = models.DateTimeField(default=datetime.now)
     Flickr_vote = models.IntegerField()
     FB_vote = models.IntegerField()
+    image = models.FileField(upload_to='uploads/images')
+
+
     def __unicode__(self):
         return str(self.title)
