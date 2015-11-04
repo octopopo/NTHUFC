@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from photos.models import Photo
 # Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
@@ -9,5 +10,6 @@ class UserProfile(models.Model):
     active_time = models.DateTimeField(default=lambda: datetime.now() + timedelta(minutes=15))
     '''
     current_student = models.BooleanField(default=True)
+
     def __unicode__(self):
         return self.user.username

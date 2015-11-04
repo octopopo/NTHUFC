@@ -5,8 +5,10 @@ from django.conf import settings
 # Create your models here.
 
 class Photo(models.Model):
-    title = models.TextField(default=None)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL)
+    title = models.CharField(max_length=30)
+    content = models.TextField(default=None)
+    #related_name can reverse foreign krey to one-to-many
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='photos')
     #upload_time = models.DateTimeField(default=datetime.now)
     Flickr_vote = models.IntegerField()
     FB_vote = models.IntegerField()
