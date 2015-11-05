@@ -1,8 +1,8 @@
 .carousel-inner > .item > img,
 .carousel-inner > .item > a > img {
-  width: 70%;
+  max-width: 70%;
   margin: auto;
 }
 #myCarousel {
-  width: 70%;
+  max-width: 70%;
 }
