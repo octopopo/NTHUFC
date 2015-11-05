@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 # Create your models here.
 '''
@@ -17,8 +17,8 @@ class UserProfile(models.Model):
 '''
 
 class Account(models.Model):
-    username = models.CharField(max_length=20)
+    username = models.CharField(max_length=20, default='')
     FB_ID = models.CharField(max_length=40)
 
     def __unicode__(self):
-        return str(self.username)
+        return self.username

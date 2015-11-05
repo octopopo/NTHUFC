@@ -25,4 +25,3 @@ class Photo(models.Model):
     def __unicode__(self):
         return str(self.title)
 
-
