@@ -19,7 +19,7 @@ class Photo(models.Model):
 
     Flickr_vote = models.IntegerField()
     FB_vote = models.IntegerField()
-    upload_time = models.DateTimeField(default=datetime.now)
+    upload_time = models.DateTimeField(default=datetime.now, blank=False, null=False)
     image = models.FileField(upload_to='uploads/images')
 
 
