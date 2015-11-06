@@ -33,3 +33,9 @@ body > .container {
   padding-right: 15px;
   padding-left: 15px;
 }
+
+#alert-modal {
+  color: white;
+  background-color: #f04124;
+  border-bottom: 1px solid #f04124;
+}

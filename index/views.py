@@ -2,7 +2,9 @@ from django.shortcuts import render
 
 # Create your views here.
 def index(request):
-    return render(request, "index/index.html", {})
+    title = 'NTHUFC'
+    return render(request, "index/index.html", {"title":title})
 
-def sign_up(request):
-    return render(request, "index/sign_up.html", {})
+def participate(request):
+    title = 'Participate'
+    return render(request, "index/participate.html", {"title":title})

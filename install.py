@@ -5,11 +5,23 @@ from func import *
 
 CONFIG_PATH = 'NTHUFC/config/NTHUFC.cfg'
 
+if not os.path.isdir('NTHUFC/config/'):
+    print 'Create config dir...',
+    os.makedirs('NTHUFC/config')
+    print 'done'
+
 if not os.path.isfile(CONFIG_PATH):
     # If the config file does not exist, create one
     print 'Create config file...',
     with open(CONFIG_PATH, 'w') as f:
         f.write('')
+    print 'done'
+
+if not os.path.exists('media/'):
+    print 'Create media dir...',
+    #os.makedirs('media/')
+    #os.makedirs('media/uploads/')
+    os.makedirs('media/uploads/images')
     print 'done\n'
 
 config = ConfigParser.RawConfigParser()
