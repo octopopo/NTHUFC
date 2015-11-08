@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'index',
     'photos',
     'users',
+    'crispy_forms',
 )
 
 MIDDLEWARE_CLASSES = (

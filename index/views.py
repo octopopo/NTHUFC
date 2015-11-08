@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from photos.models import Photo
 from users.models import Account
+from index.forms import AccountCreationFrom
+
 # Create your views here.
 def index(request):
     title = 'NTHUFC'
@@ -13,4 +15,12 @@ def index(request):
 
 def participate(request):
     title = 'Participate'
-    return render(request, "index/participate.html", {"title":title})
+    if request.method == 'POST':
+        form = AccountCreationFrom(request.POST)
+        if form.is_valid():
+            account = form.save()
+            account.backend = 'django.contrib.auth.backends.ModelBackend'
+            return redirect(reverse('index:index'))
+    else:
+        form = AccountCreationFrom()
+    return render(request, "index/participate.html", {"title": title, "form": form})
