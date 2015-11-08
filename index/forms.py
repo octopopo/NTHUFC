@@ -33,7 +33,7 @@ class AccountCreationFrom(forms.ModelForm):
                 Field('remarks'),
                 HTML('<br>')
             ),
-            #type="Submit" name="submit" value="Submit" class="btn btn-primary"
+            #type="Submit" name="submit" value="確定送出" class="btn btn-primary"
             FormActions(
                 Submit('submit', u'確定送出', css_class='btn btn-primary'),
                 css_class="submit-btn"
