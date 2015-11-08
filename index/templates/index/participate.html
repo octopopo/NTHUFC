@@ -9,114 +9,25 @@
 {% block import_source %}
 <link rel="stylesheet" href={% static "css/sign_up.css" %} media="screen">
 <script src={% static "js/upload.js" %}></script>
+<style type="text/css">
+  .control-label {
+    font-size: 20px;
+  }
+  legend {
+    font-size: 34px;
+  }
+  form {
+    width: 40%;
+    margin-left: 70px;
+  }
+  .submit-btn {
+    text-align: right;
+  }
+</style>
 {% endblock import_source %}
 {% block body_block %}
-
-
-
-      <form action="" method="post" role="form">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit" class="btn btn-primary">更新</button>
-      </form>
-      <!--
-      <fieldset>
-        <legend>Sign up</legend>
-        <div class="form-group">
-          <label for="inputName" class="col-lg-2 control-label">Name</label>
-          <div class="col-lg-10">
-            <input type="text" class="form-control" id="inputEmail" placeholder="Name">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="inputEmail" class="col-lg-2 control-label">Email</label>
-          <div class="col-lg-10">
-            <input type="text" class="form-control" id="inputEmail" placeholder="Email">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="inputPassword" class="col-lg-2 control-label">Password</label>
-          <div class="col-lg-10">
-            <input type="password" class="form-control" id="inputPassword" placeholder="Password">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="textArea" class="col-lg-2 control-label">Remarks</label>
-          <div class="col-lg-10">
-            <textarea class="form-control" rows="3" id="textArea"></textarea>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-lg-2 control-label">身份</label>
-          <div class="col-lg-10">
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-                在校生
-              </label>
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-                畢業生
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="fileupload" class="col-lg-2 control-label">File</label>
-          <div class="col-lg-10">
-            <input type="text" class="form-control" id="fileupload" placeholder="File">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-lg-10 col-lg-offset-2">
-            <button type="reset" class="btn btn-default" onclick="cancel();">Cancel</button>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
-        </div>
-      </fieldset>
-      -->
-
-
-  <!-- right block -->
-
-    <!--
-    <img src={% static "images/img_chania.jpg" %} alt="Chania" style="width: 100%;">
-    <br><br><br>
-    <img src={% static "images/img_flower.jpg" %} alt="Flower" style="width: 100%;">
-    -->
-    <!--
-    <h2>Upload your images</h2>
-    <hr><br>
-
-      <div class="row">
-        <div class="col-xs-6 col-md-4 upload_img" id="col1">
-          <span class="glyphicon glyphicon-plus glyphicon-large" aria-hidden="true" onclick="fileup(1);" id="glyphicon1"></span>
-          <img class="myImg" id="img1">
-        </div>
-        <div class="col-xs-6 col-md-4 upload_img" id="col2">
-          <span class="glyphicon glyphicon-plus glyphicon-large" aria-hidden="true" onclick="fileup(2);" id="glyphicon2"></span>
-          <img class="myImg" id="img2">
-        </div>
-      </div>
-      <br><br><br>
-      <div class="row">
-        <div class="col-xs-6 col-md-4 upload_img" id="col3">
-          <span class="glyphicon glyphicon-plus glyphicon-large" aria-hidden="true" onclick="fileup(3);" id="glyphicon3"></span>
-          <img class="myImg" id="img3">
-        </div>
-        <div class="col-xs-6 col-md-4 upload_img" id="col4">
-          <span class="glyphicon glyphicon-plus glyphicon-large" aria-hidden="true" onclick="fileup(4);" id="glyphicon4"></span>
-          <img class="myImg" id="img4">
-        </div>
-      </div>
-      -->
-      <!-- custom input file button -->
-      <!--
-      <input type="file" id="file" onchange="change(this)" style="display:none;" />
-      <script>
-
-      </script>
-      -->
-
-
+<form action="" method="post" role="form">
+  {% csrf_token %}
+  {% crispy form %}
+</form>
 {% endblock body_block %}

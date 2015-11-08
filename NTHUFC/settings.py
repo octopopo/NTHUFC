@@ -93,3 +93,6 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+#django-crispy-forms setting
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

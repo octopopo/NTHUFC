@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from photos.models import Photo
 from users.models import Account
 from index.forms import AccountCreationFrom
+from django.core.urlresolvers import reverse
 
 # Create your views here.
 def index(request):
