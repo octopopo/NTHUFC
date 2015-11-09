@@ -26,8 +26,12 @@
 </style>
 {% endblock import_source %}
 {% block body_block %}
-<form action="" method="post" role="form">
-  {% csrf_token %}
-  {% crispy form %}
-</form>
+<form method="post" action="" class="">
+
+        {% crispy form   %}
+        {% crispy formset formset.form.helper %}
+
+        <input class="submit" type="submit" value="Submit data">
+
+    </form>
 {% endblock body_block %}

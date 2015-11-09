@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from users.models import Account
+from users.models import Account, Author, Book
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Submit, HTML, Field, Div
 from crispy_forms.bootstrap import  FormActions, InlineRadios
@@ -40,3 +40,25 @@ class AccountCreationFrom(forms.ModelForm):
             )
         )
 
+class AuthorForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout(
+            Field('name'),
+        )
+        super(AuthorForm, self).__init__(*args, **kwargs)
+    class Meta:
+        model = Author
+
+class BookForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout(
+            Field('title'),
+        )
+        super(BookForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Book

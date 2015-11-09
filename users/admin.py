@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User, Group
-from users.models import Account
+from users.models import Account, Author, Book
 #from users.models import UserProfile
 
 
@@ -19,3 +19,5 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.unregister(Group)
 #admin.site.register(User, UserAdmin)
 admin.site.register(Account)
+admin.site.register(Author)
+admin.site.register(Book)
