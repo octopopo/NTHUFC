@@ -1,5 +1,16 @@
 var imgNumber = 0;
 var currentImgID = 0;
+
+function checkImgNumber() {
+    if(imgNumber <= 4){
+        $('#image-Modal').modal('toggle');
+    }
+    else{
+        $('#error-Modal').modal('show');
+        $('#error-txt').text('Max photo number is five!');
+    }
+}
+
 function selectImg(){
     document.getElementById("id_nested-0-image").click();
     $(document).ready(function(){
@@ -23,4 +34,6 @@ function setImgInfo() {
     $('#img-title').val('');
     $('#img-content').val('');
     $('#select-txt').val('');
+    imgNumber = imgNumber + 1;
+    $('#img-number').text('Number of upload image: '+imgNumber);
 }

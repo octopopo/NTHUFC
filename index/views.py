@@ -28,13 +28,13 @@ def participate(request, id_account=None):
     if request.method == "POST":
         form = AccountCreationFrom(request.POST, request.FILES, instance=account, prefix="main")
         formset = PhotoInlineFormSet(request.POST, request.FILES, instance=account, prefix="nested")
-        print request.POST
+
         if form.is_valid() and formset.is_valid():
             form.save()
             formset.save()
             return redirect(reverse('index:index'))
     else:
-        print 'no'
+
         form = AccountCreationFrom(instance=account, prefix="main")
         formset = PhotoInlineFormSet(instance=account, prefix="nested")
 
