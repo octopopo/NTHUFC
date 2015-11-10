@@ -1,0 +1,32 @@
+.control-label {
+  font-size: 20px;
+}
+
+legend {
+  font-size: 34px;
+}
+
+.well {
+  width: 45%;
+  margin-left: 25%;
+  padding: 50px;
+}
+
+.submit-btn {
+  text-align: right;
+}
+
+#image-title {
+  width: 50%;
+  margin-top: 5px;
+}
+
+#select-btn {
+  position: relative;
+  top: -33px;
+  left: -10px;
+}
+
+.modal-body {
+  padding-bottom: 0px;
+}
