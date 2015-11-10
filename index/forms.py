@@ -16,7 +16,7 @@ class AccountCreationFrom(forms.ModelForm):
         super(AccountCreationFrom, self).__init__(*args, **kwargs)
         # Set layout for fields.
         self.helper = FormHelper()
-
+        self.helper.form_tag = False
         self.fields['remarks'].widget.attrs['rows'] = 4
         self.fields['remarks'].widget.attrs['columns'] = 15
 
@@ -44,28 +44,34 @@ class AccountCreationFrom(forms.ModelForm):
 class PhotoCreationForm(forms.ModelForm):
     class Meta:
         model = Photo
-        fields = ('title', 'content', 'tags', 'image')
+        fields = ('title', 'content', 'image')
 
     def __init__(self, *args, **kwargs):
         super(PhotoCreationForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        # important!!!!! self.helper.form_tag = False
+        self.helper.form_tag = False
         self.fields['content'].widget.attrs['rows'] = 4
         self.fields['content'].widget.attrs['columns'] = 15
 
         self.helper.layout = Layout(
-            Fieldset(
-                u'上傳相片',
-                Field('title'),
-                Field('content'),
-                Field('tags'),
-                Field('image'),
-                HTML('<br>')
+            Div(
+                Fieldset(
+                    u'上傳相片',
+                    Field('title'),
+                    Field('content'),
+                    Field('image'),
+                    HTML('<br>')
+                ),
+                css_class="image-form"
             ),
         )
 
 class AuthorForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
+        # important!!!!! self.helper.form_tag = False
+        self.helper.form_tag = False
         self.helper.form_tag = False
         self.helper.layout = Layout(
             Field('name'),

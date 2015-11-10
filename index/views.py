@@ -19,23 +19,24 @@ def participate(request, id_account=None):
     title = 'Participate'
     if id_account is None:
         account = Account()
-        PhotoInlineFormSet = inlineformset_factory(Account, Photo, form=PhotoCreationForm, extra=3, can_delete=False)
+        PhotoInlineFormSet = inlineformset_factory(Account, Photo, form=PhotoCreationForm, extra=2, can_delete=False)
     else:
         account = Account.objects.get(pk=id_account)
-        PhotoInlineFormSet = inlineformset_factory(Account, Photo, form=PhotoCreationForm, extra=3, can_delete=True)
+        PhotoInlineFormSet = inlineformset_factory(Account, Photo, form=PhotoCreationForm, extra=2, can_delete=True)
 
 
     if request.method == "POST":
         form = AccountCreationFrom(request.POST, request.FILES, instance=account, prefix="main")
-        formset = PhotonlineFormSet(request.POST, request.FILES, instance=account, prefix="nested")
-
+        formset = PhotoInlineFormSet(request.POST, request.FILES, instance=account, prefix="nested")
+        print request.POST
         if form.is_valid() and formset.is_valid():
             form.save()
             formset.save()
             return redirect(reverse('index:index'))
     else:
+        print 'no'
         form = AccountCreationFrom(instance=account, prefix="main")
         formset = PhotoInlineFormSet(instance=account, prefix="nested")
 
-    #return render(request, "test_app/manage_books.html", {"form":form, "formset": formset})
+
     return render(request, "index/participate.html", {"title": title,"form":form, "formset": formset})
