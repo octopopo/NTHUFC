@@ -27,11 +27,8 @@
 {% endblock import_source %}
 {% block body_block %}
 <form method="post" action="" class="">
-
-        {% crispy form   %}
-        {% crispy formset formset.form.helper %}
-
-        <input class="submit" type="submit" value="Submit data">
-
-    </form>
+  {% crispy form %}
+  {% crispy formset formset.form.helper %}
+  <input class="submit" type="submit" value="確定送出">
+</form>
 {% endblock body_block %}

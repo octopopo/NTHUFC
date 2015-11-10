@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from users.models import Account, Author, Book
+from photos.models import Photo
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Submit, HTML, Field, Div
 from crispy_forms.bootstrap import  FormActions, InlineRadios
@@ -15,7 +16,7 @@ class AccountCreationFrom(forms.ModelForm):
         super(AccountCreationFrom, self).__init__(*args, **kwargs)
         # Set layout for fields.
         self.helper = FormHelper()
-        self.helper.label_class = ''
+
         self.fields['remarks'].widget.attrs['rows'] = 4
         self.fields['remarks'].widget.attrs['columns'] = 15
 
@@ -34,10 +35,32 @@ class AccountCreationFrom(forms.ModelForm):
                 HTML('<br>')
             ),
             #type="Submit" name="submit" value="確定送出" class="btn btn-primary"
-            FormActions(
-                Submit('submit', u'確定送出', css_class='btn btn-primary'),
-                css_class="submit-btn"
-            )
+            #FormActions(
+                #Submit('submit', u'確定送出', css_class='btn btn-primary'),
+                #css_class="submit-btn"
+            #)
+        )
+
+class PhotoCreationForm(forms.ModelForm):
+    class Meta:
+        model = Photo
+        fields = ('title', 'content', 'tag', 'image')
+
+    def __init__(self, *args, **kwargs):
+        super(PhotoCreationFrom, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.fields['content'].widget.attrs['rows'] = 4
+        self.fields['content'].widget.attrs['columns'] = 15
+
+        self.helper.layout = Layout(
+            Fieldset(
+                u'上傳相片',
+                Field('title'),
+                Field('content'),
+                Field('tag'),
+                Field('image'),
+                HTML('<br>')
+            ),
         )
 
 class AuthorForm(forms.ModelForm):
