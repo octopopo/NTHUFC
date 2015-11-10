@@ -17,10 +17,10 @@ class Photo(models.Model):
     owner = models.ForeignKey(Account, related_name='photos')
     tags = models.ManyToManyField(Tag, blank=True, null=True)
 
-    Flickr_vote = models.IntegerField()
-    FB_vote = models.IntegerField()
+    Flickr_vote = models.IntegerField(default=0)
+    FB_vote = models.IntegerField(default=0)
     upload_time = models.DateTimeField(default=datetime.now, blank=False, null=False)
-    image = models.FileField(upload_to='uploads/images')
+    image = models.ImageField(upload_to='uploads/images')
 
 
     def __unicode__(self):
