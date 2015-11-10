@@ -19,10 +19,14 @@ def participate(request, id_account=None):
     title = 'Participate'
     if id_account is None:
         account = Account()
-        PhotoInlineFormSet = inlineformset_factory(Account, Photo, form=PhotoCreationForm, extra=1, can_delete=False)
+        PhotoInlineFormSet = inlineformset_factory(Account, Photo,
+            form=PhotoCreationForm, max_num=5, validate_max=True,
+            min_num=1, validate_min=True, extra=2, can_delete=False)
     else:
         account = Account.objects.get(pk=id_account)
-        PhotoInlineFormSet = inlineformset_factory(Account, Photo, form=PhotoCreationForm, extra=1, can_delete=True)
+        PhotoInlineFormSet = inlineformset_factory(Account, Photo,
+            form=PhotoCreationForm, max_num=5, validate_max=True,
+            min_num=1, validate_min=True, extra=2, can_delete=True)
 
 
     if request.method == "POST":

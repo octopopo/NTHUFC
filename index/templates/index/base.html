@@ -48,13 +48,13 @@
     </nav>
     <center>
       <!-- Modal -->
-      <div class="modal fade" id="error-Modal" role="dialog">
+      <div class="modal fade" id="msg-Modal" role="dialog">
         <div class="modal-dialog">
           <!-- Modal content-->
           <div class="modal-content">
             <div class="modal-header" id="alert-modal">
               <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title"><strong id="error-txt"></strong></h4>
+              <h4 class="modal-title"><strong id="msg-txt"></strong></h4>
             </div>
           </div>
         </div>
@@ -63,8 +63,8 @@
     <script>
       function checkLogin(){
         //if not login
-        //$('#error-Modal').modal('show');
-        //$('#error-txt').text('You should login first!');
+        //$('#msg-Modal').modal('show');
+        //$('#msg-txt').text('You should login first!');
         //else
         $("#participate").attr("href", "{% url 'index:participate' %}");
       }

@@ -10,10 +10,13 @@ legend {
   width: 45%;
   margin-left: 25%;
   padding: 50px;
+  padding-bottom: 10px;
 }
 
-.submit-btn {
+#submit-btn {
   text-align: right;
+  position: relative;
+  left: 40px;
 }
 
 #image-title {
@@ -29,4 +32,8 @@ legend {
 
 .modal-body {
   padding-bottom: 0px;
+}
+
+.image-form {
+  display: none;
 }

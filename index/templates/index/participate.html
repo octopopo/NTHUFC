@@ -18,10 +18,14 @@
     <div style="text-align: right">
       <input type="button" class="btn btn-success" value="Upload image" onclick="checkImgNumber();">
       <p id="img-number">Number of upload image: 0</p>
+      <p style="position: relative;top: -15px;">Max number is 5</p>
     </div>
     <br>
     {% crispy formset formset.form.helper %}
-    <input class="submit" type="submit" value="確定送出">
+    <div id="submit-btn">
+      <input class="btn btn-default" type="reset" value="重設" onclick="resetParticipateForm();">
+      <input class="btn btn-primary" type="submit" value="確定送出" onclick="return submitCheck();">
+    </div>
   </form>
 </div>
 
@@ -34,7 +38,7 @@
         <h3 class="modal-title" id="image-ModalLabel">Upload image</h3>
       </div>
       <div class="modal-body">
-        <form>
+        <form id="popup-img-form">
           <div class="form-group">
             <label for="img-title" class="control-label">Title:</label>
             <input type="text" class="form-control" id="img-title">
@@ -51,6 +55,7 @@
         </form>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-default" onclick="resetPopup();">Cancel</button>
         <button type="button" class="btn btn-primary" onclick="setImgInfo();">OK</button>
       </div>
     </div>
