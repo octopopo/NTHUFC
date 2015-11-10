@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from photos.models import Photo
-from users.models import Account, Author, Book
-from index.forms import AccountCreationFrom, AuthorForm, BookForm, PhotoCreationForm
+from users.models import Account
+from index.forms import AccountCreationFrom, PhotoCreationForm
 from django.core.urlresolvers import reverse
 from django.forms.models import inlineformset_factory
 
@@ -19,10 +19,10 @@ def participate(request, id_account=None):
     title = 'Participate'
     if id_account is None:
         account = Account()
-        PhotoInlineFormSet = inlineformset_factory(Account, Photo, form=PhotoCreationForm, extra=2, can_delete=False)
+        PhotoInlineFormSet = inlineformset_factory(Account, Photo, form=PhotoCreationForm, extra=1, can_delete=False)
     else:
         account = Account.objects.get(pk=id_account)
-        PhotoInlineFormSet = inlineformset_factory(Account, Photo, form=PhotoCreationForm, extra=2, can_delete=True)
+        PhotoInlineFormSet = inlineformset_factory(Account, Photo, form=PhotoCreationForm, extra=1, can_delete=True)
 
 
     if request.method == "POST":

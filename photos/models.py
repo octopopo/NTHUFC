@@ -20,7 +20,7 @@ class Photo(models.Model):
     Flickr_vote = models.IntegerField(default=0)
     FB_vote = models.IntegerField(default=0)
     upload_time = models.DateTimeField(default=datetime.now, blank=False, null=False)
-    image = models.FileField(upload_to='uploads/images')
+    image = models.ImageField(upload_to='uploads/images')
 
 
     def __unicode__(self):

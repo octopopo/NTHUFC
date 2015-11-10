@@ -1,34 +1,26 @@
-var ID;
-function fileup(id){
-  var fileup = document.getElementById("fileupload");
-  file.click();
-  ID = id;
+var imgNumber = 0;
+var currentImgID = 0;
+function selectImg(){
+    document.getElementById("id_nested-0-image").click();
+    $(document).ready(function(){
+        $('#id_nested-0-image').change(function(e){
+            var fileName = e.target.files[0].name;
+            alert('The file "' + fileName +  '" has been selected.');
+            $('#select-txt').val(fileName);
+        });
+    });
 }
-function change(input){
-    var file = document.getElementById("file"),
-    fileup = document.getElementById("fileupload");
-    fileup.value = fileup.value + file.value + ' ';
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
 
-        reader.onload = function (e) {
-            $('#img' + ID)
-                .attr('src', e.target.result);
-                //.width(150)
-                //.height(200);
-        };
+//setImgInfo except img file url
+function setImgInfo() {
+    $('#image-Modal').modal('toggle');
+    var title = $('#img-title').val();
+    var content = $('#img-content').val();
+    $('#id_nested-0-title').val(title);
+    $('#id_nested-0-content').val(content);
 
-        reader.readAsDataURL(input.files[0]);
-    }
-    $("#glyphicon" + ID).css({"display": "none"});
-    $("#col" + ID).css({"border": "0px"});
-    $("#img" + ID).css({"display": "block"});
-}
-function cancel(){
-    for(var i=1; i<=4; i++){
-        $("#glyphicon" + i).css({"display": "block"});
-        $("#col" + i).css({"border": "6px dashed #ccc"});
-        $("#img" + i).css({"display": "none"});
-        $("#img" + i).attr("src","#");
-    }
+    //clean after close modal
+    $('#img-title').val('');
+    $('#img-content').val('');
+    $('#select-txt').val('');
 }
