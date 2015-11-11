@@ -15,7 +15,10 @@
 <div class="well">
   <form enctype="multipart/form-data" method="post" action="" class="form-horizontal" role="form">
     {% crispy form %}
-    <div style="text-align: right">
+    <div class="form-group">
+      <textarea class="form-control" id="img-nameset" data-autoresize rows="1" disabled></textarea>
+    </div>
+    <div id="upload-img-btn-block">
       <input type="button" class="btn btn-success" value="Upload image" onclick="checkImgNumber();">
       <p id="img-number">Number of upload image: 0</p>
       <p style="position: relative;top: -15px;">Max number is 5</p>
@@ -40,8 +43,8 @@
       <div class="modal-body">
         <form id="popup-img-form">
           <div class="form-group">
-            <label for="img-title" class="control-label">Title:</label>
-            <input type="text" class="form-control" id="img-title">
+            <label for="img-name" class="control-label">Title:</label>
+            <input type="text" class="form-control" id="img-name">
           </div>
           <div class="form-group">
             <label for="image-content" class="control-label">Content:</label>

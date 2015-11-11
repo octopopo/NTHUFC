@@ -32,7 +32,6 @@ class AccountCreationFrom(forms.ModelForm):
                 Field('major'),
                 InlineRadios('year_in_school'),
                 Field('remarks'),
-                HTML('<br>')
             ),
             #type="Submit" name="submit" value="確定送出" class="btn btn-primary"
             #FormActions(

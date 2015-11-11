@@ -37,3 +37,19 @@ legend {
 .image-form {
   display: none;
 }
+
+#upload-img-btn-block {
+  text-align: right;
+  position: relative;
+  left: 13px;
+}
+
+#img-nameset {
+  color: blue;
+}
+
+#img-nameset {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  resize: none;
+}
