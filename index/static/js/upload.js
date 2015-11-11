@@ -28,13 +28,13 @@ function selectImg(){
 //setImgInfo except img file url
 function setImgInfo() {
     $('#image-Modal').modal('toggle');
-    var title = $('#img-name').val();
+    var title = $('#img-title').val();
     var content = $('#img-content').val();
     $('#id_nested-'+currentImgID+'-title').val(title);
     $('#id_nested-'+currentImgID+'-content').val(content);
 
     //clean after close modal
-    $('#img-name').val('');
+    $('#img-title').val('');
     $('#img-content').val('');
     $('#select-txt').val('');
     imgNumber = imgNumber + 1;
@@ -51,6 +51,10 @@ function setImgInfo() {
         $('#img-nameset').val(imgNumber + '. ' + fileName);
         firstfile = !firstfile;
     }
+
+    //set upload-img-btn name
+    if(imgNumber >= 1)
+        $('#upload-btn').val('Upload another image');
 }
 
 function resetPopup(){
@@ -68,6 +72,9 @@ function resetParticipateForm(){
     //reset nameset
     $('#img-nameset').val('');
     document.getElementById("img-nameset").rows = 1;
+
+    //reset upload-img-btn name
+    $('#upload-btn').val('Upload image');
 }
 
 //check img number whether is 0
@@ -78,4 +85,3 @@ function submitCheck(){
         return false;
     }
 }
-
