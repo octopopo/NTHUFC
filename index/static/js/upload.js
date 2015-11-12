@@ -147,7 +147,6 @@ function changeValidationError(field, status){
         if(status == 'wrong'){
             $('#popup-img-form .form-group:eq(1)').addClass('has-error');
             $('#popup-img-form .asteriskField:eq(1)').css("color","#f04124");
-
         }
         else{
             $('#popup-img-form .form-group:eq(1)').removeClass('has-error');
