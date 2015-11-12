@@ -1,4 +1,4 @@
-var imgNumber = 1;
+var imgNumber = 0;
 var currentImgID = 0;
 var nameset = '';
 var fileName = '';
@@ -133,18 +133,10 @@ function validationError(){
 }
 
 function changeValidationError(field, status){
-    var span = document.createElement("span");
-    span.className = "help-block"
-    var strong = document.createElement("strong");
-    var t = document.createTextNode("This field is required.");
-    strong.appendChild(t);
-    span.appendChild(strong);
-
     if(field == 'title'){
         if(status == 'wrong'){
             $('#popup-img-form .form-group:eq(0)').addClass('has-error');
             $('#popup-img-form .asteriskField:eq(0)').css("color","#f04124");
-            document.getElementById("popup-img-form").children[0].appendChild(span);
         }
         else{
             $('#popup-img-form .form-group:eq(0)').removeClass('has-error');
@@ -155,7 +147,7 @@ function changeValidationError(field, status){
         if(status == 'wrong'){
             $('#popup-img-form .form-group:eq(1)').addClass('has-error');
             $('#popup-img-form .asteriskField:eq(1)').css("color","#f04124");
-            document.getElementById("popup-img-form").children[1].appendChild(span);
+
         }
         else{
             $('#popup-img-form .form-group:eq(1)').removeClass('has-error');
@@ -166,7 +158,6 @@ function changeValidationError(field, status){
         if(status == 'wrong'){
             $('#popup-img-form .form-group:eq(2)').addClass('has-error');
             $('#popup-img-form .asteriskField:eq(2)').css("color","#f04124");
-            document.getElementById("popup-img-form").children[2].children[0].appendChild(span);
         }
         else{
             $('#popup-img-form .form-group:eq(2)').removeClass('has-error');

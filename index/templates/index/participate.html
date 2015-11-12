@@ -22,6 +22,7 @@
       <input type="button" class="btn btn-success" value="Upload image" onclick="checkImgNumber('upload');" id="upload-btn">
       <p id="img-number">Number of upload image: 0</p>
       <p style="position: relative;top: -15px;">Max number is 5</p>
+      <p style="position: relative;top: -30px;">*為必填</p>
     </div>
     <br>
     {% crispy formset formset.form.helper %}
