@@ -4,13 +4,20 @@ var nameset = '';
 var fileName = '';
 var firstfile = true;
 //check img number whether exceed 5
-function checkImgNumber() {
-    if(imgNumber <= 4){
-        $('#image-Modal').modal('toggle');
+function checkImgNumber(action) {
+    if(action == 'upload'){
+        if(imgNumber <= 4){
+            $('#image-Modal').modal('toggle');
+        }
+        else{
+            showMsgModal('Max photo number is five!');
+        }
     }
-    else{
-        $('#msg-Modal').modal('show');
-        $('#msg-txt').text('Max photo number is five!');
+    else if(action == 'submit'){
+        if(imgNumber == 0){
+            showMsgModal('At least submit one photo!');
+            return false;
+        }
     }
 }
 
@@ -39,7 +46,7 @@ function setImgInfo() {
     $('#select-txt').val('');
     imgNumber = imgNumber + 1;
     currentImgID = currentImgID + 1;
-    $('#img-number').text('Number of upload image: '+imgNumber);
+    $('#img-number').text('Number of upload image: ' + imgNumber);
 
     //fill-in nameset
     if(!firstfile){
@@ -57,7 +64,7 @@ function setImgInfo() {
         $('#upload-btn').val('Upload another image');
 }
 
-function resetPopup(){
+function resetModalForm(){
     //clean img modal
     document.getElementById("popup-img-form").reset();
 
@@ -75,13 +82,17 @@ function resetParticipateForm(){
 
     //reset upload-img-btn name
     $('#upload-btn').val('Upload image');
+
+    firstfile = true;
 }
 
-//check img number whether is 0
-function submitCheck(){
-    if(imgNumber == 0){
-        $('#msg-Modal').modal('show');
-        $('#msg-txt').text('At least submit one photo!');
-        return false;
-    }
+//show msg modal
+function showMsgModal(msg){
+    $('#msg-Modal').modal('show');
+    $('#msg-txt').text(msg);
+}
+
+//modal form validationerror
+function validationError(){
+
 }
