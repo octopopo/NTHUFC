@@ -1,4 +1,4 @@
-var imgNumber = 0;
+var imgNumber = 1;
 var currentImgID = 0;
 var nameset = '';
 var fileName = '';
@@ -34,34 +34,46 @@ function selectImg(){
 
 //setImgInfo except img file url
 function setImgInfo() {
-    $('#image-Modal').modal('toggle');
-    var title = $('#img-title').val();
-    var content = $('#img-content').val();
-    $('#id_nested-'+currentImgID+'-title').val(title);
-    $('#id_nested-'+currentImgID+'-content').val(content);
-
-    //clean after close modal
-    $('#img-title').val('');
-    $('#img-content').val('');
-    $('#select-txt').val('');
-    imgNumber = imgNumber + 1;
-    currentImgID = currentImgID + 1;
-    $('#img-number').text('Number of upload image: ' + imgNumber);
-
-    //fill-in nameset
-    if(!firstfile){
-        document.getElementById("img-nameset").rows = document.getElementById("img-nameset").rows + 1;
-        nameset = $('#img-nameset').val();
-        $('#img-nameset').val(nameset + '\n' + imgNumber + '. ' + fileName);
+    //check modal form
+    var valid = validationError();
+    if(valid == false){
+        return false;
     }
-    else{
-        $('#img-nameset').val(imgNumber + '. ' + fileName);
-        firstfile = !firstfile;
-    }
+    else {
+        $('#image-Modal').modal('toggle');
+        var title = $('#img-title').val();
+        var content = $('#img-content').val();
+        $('#id_nested-'+currentImgID+'-title').val(title);
+        $('#id_nested-'+currentImgID+'-content').val(content);
 
-    //set upload-img-btn name
-    if(imgNumber >= 1)
-        $('#upload-btn').val('Upload another image');
+        //clean after close modal
+        $('#img-title').val('');
+        $('#img-content').val('');
+        $('#select-txt').val('');
+        changeValidationError('title', 'correct');
+        changeValidationError('content', 'correct');
+        changeValidationError('txt', 'correct');
+
+
+        imgNumber = imgNumber + 1;
+        currentImgID = currentImgID + 1;
+        $('#img-number').text('Number of upload image: ' + imgNumber);
+
+        //fill-in nameset
+        if(!firstfile){
+            document.getElementById("img-nameset").rows = document.getElementById("img-nameset").rows + 1;
+            nameset = $('#img-nameset').val();
+            $('#img-nameset').val(nameset + '\n' + imgNumber + '. ' + fileName);
+        }
+        else{
+            $('#img-nameset').val(imgNumber + '. ' + fileName);
+            firstfile = !firstfile;
+        }
+
+        //set upload-img-btn name
+        if(imgNumber >= 1)
+            $('#upload-btn').val('Upload another image');
+    }
 }
 
 function resetModalForm(){
@@ -94,5 +106,71 @@ function showMsgModal(msg){
 
 //modal form validationerror
 function validationError(){
+    var valid = true;
+    if($('#img-title').val() == ''){
+        changeValidationError('title', 'wrong');
+        valid = false;
+    }
+    else
+        changeValidationError('title', 'correct');
 
+
+    if($('#img-content').val() == ''){
+        changeValidationError('content', 'wrong');
+        valid = false;
+    }
+    else
+        changeValidationError('content', 'correct');
+
+    if($('#select-txt').val() == ''){
+        changeValidationError('txt', 'wrong');
+        valid = false;
+    }
+    else
+        changeValidationError('txt', 'correct');
+
+    return valid;
+}
+
+function changeValidationError(field, status){
+    var span = document.createElement("span");
+    span.className = "help-block"
+    var strong = document.createElement("strong");
+    var t = document.createTextNode("This field is required.");
+    strong.appendChild(t);
+    span.appendChild(strong);
+
+    if(field == 'title'){
+        if(status == 'wrong'){
+            $('#popup-img-form .form-group:eq(0)').addClass('has-error');
+            $('#popup-img-form .asteriskField:eq(0)').css("color","#f04124");
+            document.getElementById("popup-img-form").children[0].appendChild(span);
+        }
+        else{
+            $('#popup-img-form .form-group:eq(0)').removeClass('has-error');
+            $('#popup-img-form .asteriskField:eq(0)').css("color","#222222");
+        }
+    }
+    else if(field == 'content'){
+        if(status == 'wrong'){
+            $('#popup-img-form .form-group:eq(1)').addClass('has-error');
+            $('#popup-img-form .asteriskField:eq(1)').css("color","#f04124");
+            document.getElementById("popup-img-form").children[1].appendChild(span);
+        }
+        else{
+            $('#popup-img-form .form-group:eq(1)').removeClass('has-error');
+            $('#popup-img-form .asteriskField:eq(1)').css("color","#222222");
+        }
+    }
+    else if(field == 'txt'){
+        if(status == 'wrong'){
+            $('#popup-img-form .form-group:eq(2)').addClass('has-error');
+            $('#popup-img-form .asteriskField:eq(2)').css("color","#f04124");
+            document.getElementById("popup-img-form").children[2].children[0].appendChild(span);
+        }
+        else{
+            $('#popup-img-form .form-group:eq(2)').removeClass('has-error');
+            $('#popup-img-form .asteriskField:eq(2)').css("color","#222222");
+        }
+    }
 }
