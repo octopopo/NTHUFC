@@ -98,12 +98,6 @@ function resetParticipateForm(){
     firstfile = true;
 }
 
-//show msg modal
-function showMsgModal(msg){
-    $('#msg-Modal').modal('show');
-    $('#msg-txt').text(msg);
-}
-
 //modal form validationerror
 function validationError(){
     var valid = true;

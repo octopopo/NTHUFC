@@ -10,7 +10,13 @@
     <link rel="stylesheet" href={% static "css/base.css" %} media="screen">
     <script src={% static "js/jquery-2.1.4.min.js" %}></script>
     <script src={% static "js/bootstrap.min.js" %}></script>
-
+    <script type="text/javascript">
+        //show msg modal
+        function showMsgModal(msg){
+            $('#msg-Modal').modal('show');
+            $('#msg-txt').text(msg);
+        }
+    </script>
     {% block import_source %}
     {% endblock import_source %}
   </head>
