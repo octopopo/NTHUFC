@@ -1,0 +1,55 @@
+.control-label {
+  font-size: 20px;
+}
+
+legend {
+  font-size: 34px;
+}
+
+.well {
+  width: 45%;
+  margin-left: 25%;
+  padding: 50px;
+  padding-bottom: 10px;
+}
+
+#submit-btn {
+  text-align: right;
+  position: relative;
+  left: 40px;
+}
+
+#image-title {
+  width: 50%;
+  margin-top: 5px;
+}
+
+#select-btn {
+  position: relative;
+  top: -33px;
+  left: -10px;
+}
+
+.modal-body {
+  padding-bottom: 0px;
+}
+
+.image-form {
+  display: none;
+}
+
+#upload-img-btn-block {
+  text-align: right;
+  position: relative;
+  left: 13px;
+}
+
+#img-nameset {
+  color: blue;
+}
+
+#img-nameset {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  resize: none;
+}

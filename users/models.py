@@ -26,11 +26,15 @@ class Account(models.Model):
     SOPHOMORE = 'SO'
     JUNIOR = 'JR'
     SENIOR = 'SR'
+    FIRST_YEAR_OF_MASTER = 'FM'
+    SECON_YEAR_OF_MASTER = 'SM'
     YEAR_IN_SCHOOL_CHOICES = (
-        (FRESHMAN, 'Freshman'),
-        (SOPHOMORE, 'Sophomore'),
-        (JUNIOR, 'Junior'),
-        (SENIOR, 'Senior'),
+        (FRESHMAN, '大一'),
+        (SOPHOMORE, '大二'),
+        (JUNIOR, '大三'),
+        (SENIOR, '大四'),
+        (FIRST_YEAR_OF_MASTER, '碩一'),
+        (SECON_YEAR_OF_MASTER, '碩二')
     )
     #major choice
     ANTH = 'ANTH'
@@ -166,6 +170,8 @@ class Account(models.Model):
     )
     major = models.CharField(max_length=6, choices=MAJOR_CHOICES, default=None)
     year_in_school = models.CharField(max_length=2, choices=YEAR_IN_SCHOOL_CHOICES, default=None)
+    remarks = models.TextField(default=None, blank=True, null=True)
 
     def __unicode__(self):
         return self.username
+

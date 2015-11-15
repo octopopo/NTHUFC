@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'index',
     'photos',
     'users',
+    'crispy_forms',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -92,3 +93,6 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+#django-crispy-forms setting
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
