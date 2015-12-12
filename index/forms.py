@@ -10,28 +10,29 @@ class AccountCreationFrom(forms.ModelForm):
 
     class Meta:
         model = Account
-        fields = ('username', 'major', 'year_in_school', 'remarks')
+        fields = ('username', 'nickname', 'identity', 'major', 'email', 'cellphone')
 
     def __init__(self, *args, **kwargs):
         super(AccountCreationFrom, self).__init__(*args, **kwargs)
         # Set layout for fields.
         self.helper = FormHelper()
         self.helper.form_tag = False
-        self.fields['remarks'].widget.attrs['rows'] = 4
-        self.fields['remarks'].widget.attrs['columns'] = 15
-
         self.fields['username'].label = u'姓名'
-        self.fields['major'].label = u'系所'
-        self.fields['year_in_school'].label = u'年級'
-        self.fields['remarks'].label = u'備註'
+        self.fields['nickname'].label = u'暱稱'
+        self.fields['identity'].label = u'身份'
+        self.fields['major'].label = u'系所或單位'
+        self.fields['email'].label = u'信箱'
+        self.fields['cellphone'].label = u'手機'
 
         self.helper.layout = Layout(
             Fieldset(
                 u'報名資料',
                 Field('username'),
-                Field('major'),
-                InlineRadios('year_in_school'),
-                Field('remarks'),
+                Field('nickname'),
+                Field('email'),
+                Field('cellphone'),
+                InlineRadios('identity'),
+                Field('major')
             ),
             #type="Submit" name="submit" value="確定送出" class="btn btn-primary"
             #FormActions(

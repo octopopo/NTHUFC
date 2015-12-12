@@ -1,7 +1,8 @@
 #-*- encoding=UTF-8 -*-
 from django.db import models
 from django.conf import settings
-
+from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 # Create your models here.
 '''
 class UserProfile(models.Model):
@@ -33,8 +34,8 @@ class Account(models.Model):
     )
 
     identity = models.CharField(max_length=2, choices=IDENTITY_CHOICES, default=None)
-    major = models.CharField(max_length=20, default='')
+    major = models.CharField(max_length=20, default='', blank=True, null=True)
     email = models.EmailField(max_length=256)
-    cellphone = models.IntegerField(max_length=10, unique=True, validators=[RegexValidator(regex='^\d{10}$', message='Length has to be 10', code='Invalid number')])
+    cellphone = models.CharField(max_length=10, unique=True, validators=[RegexValidator(regex='^\d{10}$', message='Invalid number', code='Invalid number')])
     def __unicode__(self):
         return self.username
