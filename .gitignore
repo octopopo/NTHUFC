@@ -10,3 +10,12 @@ migrations/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+
+#3rd party library
+#3rd_party_library/
+
+db.sqlite3
+
+#authorization data
+oauth_verifier.txt
+photos/authorization_token.py
