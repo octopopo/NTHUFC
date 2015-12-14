@@ -24,9 +24,9 @@ class Photo(models.Model):
     content = models.TextField(default=None)
     #related_name can reverse foreign krey to one-to-many
     owner = models.ForeignKey(Account, related_name='photos')
-    tags = models.ManyToManyField(Tag, blank=True, null=True)
+    #tags = models.ManyToManyField(Tag, blank=True, null=True)
 
-    location_marker = models.ForeignKey(LocationMarker)
+    #location_marker = models.ForeignKey(LocationMarker)
     flickr_photo_id = models.CharField(max_length=50)
     facebook_post_id = models.CharField(max_length=50)
     upload_time = models.DateTimeField(default=datetime.now, blank=False, null=False)
