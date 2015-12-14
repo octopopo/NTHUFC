@@ -53,3 +53,8 @@ legend {
   box-sizing: border-box;
   resize: none;
 }
+
+#preview_img{
+  max-width: 100%;
+  display: none;
+}
