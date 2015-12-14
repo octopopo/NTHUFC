@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+{% extends "index/base.html" %}
+{% load static %}
+
+
+{% block title_name %}
+  <title>Photos</title>
+{% endblock title_name %}
+
+{% block import_source %}
+ 	<script src="{% static 'photos/fb.js' %}"></script>
+{% endblock import_source %}
+
+{% block body_block %}
+	<script>
+		function getPhotos(photo_id_list){
+			console.log(photo_id_list);
+			$.ajax({
+				url: '{% url "photos:show" %}',
+				method: 'POST',
+				data:{
+					'csrfmiddlewaretoken': getCookie('csrftoken'),
+					'photo_id_list': photo_id_list,
+				},
+				success: function(response){
+					console.log(response)
+					for ( i in response.photo_list)
+						showPhoto(response.photo_list[i])
+				},
+				error: function(response){
+					console.log(response)
+				},
+			});
+		}
+
+		function showPhoto(photo){
+			var img = document.createElement("img");
+			img.src=photo.photo_url;
+			$('body').append(img);
+			var div = document.createElement('div')
+			div.innerHTML += '#Facebook likes: <b id="likeCount_'+photo.facebook_post_id+'">'+photo.facebook_likes+'</b> <button id="like_'+photo.facebook_post_id+'" type="button" class="btn btn-xs btn-primary" onclick="postLike_btn(\''+photo.facebook_post_id+'\')" >Like</button><br>';
+			div.innerHTML += '#Flickr favorites: '+photo.flickr_favorites+'<br>';
+			div.innerHTML += 'facebook post id: '+photo.facebook_post_id+'<br>';
+			div.innerHTML += 'Content:<br><pre>'+photo.photo_content+'</pre><br>';
+			$('body').append(div);
+			var ul = document.createElement('ui');
+			ul.id = 'commentList_'+photo.facebook_post_id;
+			for ( i  in photo.comment_list){
+				var item = photo.comment_list[i];
+				ul.innerHTML += '<li><img src="'+item.user_photo_url+'">'+item.user_name+": "+item.comment_text+'</li>';
+			}
+			$('body').append(ul);
+			$('body').append("<input id='addcomment_"+photo.facebook_post_id+"' type='text'><button type='button' class='btn btn-xs btn-primary' onclick='post_btn(\""+photo.facebook_post_id+"\")'>Comment</button><br>");
+			$('body').append(document.createElement('hr'));
+		}
+
+		getPhotos({{photo_id_list}})
+
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId      : '1645068735761448',
+				cookie     : true,  // enable cookies to allow the server to access 
+			                        // the session
+				xfbml      : true,  // parse social plugins on this page
+				version    : 'v2.5' // use version 2.2
+			});
+
+			FB.getLoginStatus(function(response) {
+			    console.log(response);
+			});
+		};
+		function postComment(access_token, photo_id, comment_text){
+			$.ajax({
+				url: "{% url 'photos:ajax_post_comment' %}",
+				method: 'POST',
+				data:{
+					'csrfmiddlewaretoken': getCookie('csrftoken'),
+					'access_token': access_token,
+					'photo_id': photo_id,
+					'comment_text': comment_text,
+				},
+				success: function(response){
+					console.log(response)
+					alert('success')
+					ul = document.getElementById('commentList_'+photo_id)
+					ul.innerHTML = ''
+					for ( i  in response.comment_list){
+						var item = response.comment_list[i];
+						ul.innerHTML += '<li><img src="'+item.user_photo_url+'">'+item.user_name+": "+item.comment_text+'</li>';
+					}
+					$('#addcomment_'+photo_id).val('')
+				},
+				error: function(response){
+					console.log(response)
+				},
+			});
+		}
+
+		function post_btn(photo_id){
+			FB.login(function(response) {
+				if (response.status === 'connected') {
+					__facebook_user_id = response.authResponse.userID;
+			      	if (response && !response.error) {
+			        	if (response.authResponse.grantedScopes.indexOf('publish_actions') > -1){
+			        		console.log(__facebook_user_id+'login successfully!')
+							access_token = response.authResponse.accessToken;
+							comment_text = $('#addcomment_'+photo_id).val();
+							if (comment_text =='' || !comment_text)
+								alert('please enter some comment')
+							else{
+								postComment(access_token, photo_id, comment_text);
+							}
+						}
+						else{
+							console.log('Please login and grant the permission');
+			        		alert('Please login and grant the permission');
+						}
+			      	}
+			      	else{
+			      		console.log('login failed');
+			      		console.log(response);
+			      	}
+				}
+				else{
+				   	console.log('Please login and grant the permission');
+				}
+			}, {auth_type: 'rerequest', scope: 'publish_actions',return_scopes: true});
+		}
+
+		function postLike(access_token, photo_id){
+			$.ajax({
+				url: "{% url 'photos:ajax_post_like' %}",
+				method: 'POST',
+				data:{
+					'csrfmiddlewaretoken': getCookie('csrftoken'),
+					'access_token': access_token,
+					'photo_id': photo_id,
+				},
+				success: function(response){
+					console.log(response)
+					alert('success')
+					$('#likeCount_'+photo_id).html(response.facebook_likes);
+					$('#like_'+photo_id).addClass('disabled').attr("disabled", true);
+				},
+				error: function(response){
+					console.log(response)
+				},
+			});
+		}		
+
+		function postLike_btn(photo_id){
+			FB.login(function(response) {
+				if (response.status === 'connected') {
+					__facebook_user_id = response.authResponse.userID;
+			      	if (response && !response.error) {
+			        	if (response.authResponse.grantedScopes.indexOf('publish_actions') > -1){
+			        		console.log(__facebook_user_id+'login successfully!')
+							access_token = response.authResponse.accessToken;
+							postLike(access_token,photo_id);
+						}
+						else{
+							console.log('Please login and grant the permission');
+			        		alert('Please login and grant the permission');
+						}
+			      	}
+			      	else{
+			      		console.log('login failed');
+			      		console.log(response);
+			      	}
+				}
+				else{
+				   	console.log('Please login and grant the permission');
+				}
+			}, {auth_type: 'rerequest', scope: 'publish_actions',return_scopes: true});
+		}
+	</script>
+
+
+
+{% endblock body_block %}

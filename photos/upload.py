@@ -1,8 +1,38 @@
 #-*- encoding=UTF-8 -*-
 import flickr_api
 import facebook
+import json
 from .authorization_token import __facebook_page_token, __flickr_api_key, __flickr_api_secret
 from .models import Photo
+
+class Comment(object):
+	"""docstring for Comment"""
+	def __init__(self, user_name, user_photo_url, comment_text, comment_id):
+		super(Comment, self).__init__()
+		self.user_name = user_name;
+		self.user_photo_url = user_photo_url;
+		self.comment_text = comment_text;
+		self.comment_id = comment_id;
+
+	def toDict(self):
+		return {
+			'user_name':self.user_name, 
+			'user_photo_url':self.user_photo_url, 
+			'comment_text': self.comment_text,
+			'comment_id': self.comment_id,
+		}
+
+class CommentJsonEncoder(json.JSONEncoder):
+	"""docstring for CommentJsonEncoder"""
+	def default(self, obj):
+		if isinstance(obj, Comment):
+			return {
+				'user_name':obj.user_name, 
+				'user_photo_url':obj.user_photo_url, 
+				'comment_text': obj.comment_text,
+				'comment_id': obj.comment_id,
+			}
+		return json.JSONEncoder.default(self, obj)
 
 def uploadPhoto(id):
 	'''
@@ -77,3 +107,77 @@ def updateFlickrPhotoURL(photo):
 		message= getFacebookPostCntent(photo)
 	)
 	return facebook_response
+
+def getPhotoDetails(photo):
+	__facebook_query_field = 'likes.summary(true), comments{from{name, picture{url}}, message}'
+	graph = facebook.GraphAPI(access_token=__facebook_page_token, version='2.5')
+	response = graph.get_object(id=photo.facebook_post_id, fields=__facebook_query_field)
+	comment_list = []
+	
+	if 'comments' in response:
+		for item in response['comments']['data']:
+			comment_list.append(
+				Comment(
+					user_name=item['from']['name'], 
+					user_photo_url=item['from']['picture']['data']['url'],
+					comment_text=item['message'], 
+					comment_id=item['id'],
+				)
+			)
+	facebook_likes = response['likes']['summary']['total_count']
+
+	flickr_api.set_keys(api_key = __flickr_api_key, api_secret = __flickr_api_secret)
+	flickr_api.set_auth_handler('oauth_verifier.txt')
+	favorites = flickr_api.Photo(id = photo.flickr_photo_id).getFavorites()
+
+	return { 
+		'facebook_likes': facebook_likes, 
+		'facebook_post_id': photo.facebook_post_id,
+		'comment_list': [ x.toDict() for x in comment_list],
+		'flickr_favorites': len(favorites),
+		'photo_url': photo.flickr_photo_url,
+		'photo_content':getFacebookPostCntent(photo),
+	}
+
+def postComment(access_token, photo_id, comment_text):
+	graph = facebook.GraphAPI(access_token=access_token, version='2.5')
+	response = graph.put_comment(object_id=photo_id, message=comment_text)
+	if 'id' in response:
+		graph = facebook.GraphAPI(access_token=__facebook_page_token, version='2.5')
+		response = graph.get_object(id=photo_id, fields='comments{from{name, picture{url}}, message}')
+		comment_list = []
+		if 'comments' in response:
+			for item in response['comments']['data']:
+				comment_list.append(
+					Comment(
+						user_name=item['from']['name'], 
+						user_photo_url=item['from']['picture']['data']['url'],
+						comment_text=item['message'], 
+						comment_id=item['id'],
+					)
+				)
+		return {'comment_id':response['id'], 'comment_list': [ x.toDict() for x in comment_list]}
+	else:
+		return response
+
+def postLike(access_token, photo_id):
+	graph = facebook.GraphAPI(access_token=access_token, version='2.5')
+	response = graph.put_like(object_id=photo_id)
+	print response
+	
+	graph = facebook.GraphAPI(access_token=__facebook_page_token, version='2.5')
+	response = graph.get_object(id=photo_id, fields='likes.summary(true)')
+	return {'facebook_likes':response['likes']['summary']['total_count']}
+
+def checkIsLiked(photo_id, user_id):
+	graph = facebook.GraphAPI(access_token=__facebook_page_token, version='2.5')
+	response = graph.get_object(id=photo_id, fields='likes')
+	for item in response['likes']['data']:
+		if item['id'] == user_id
+			return True
+
+	return False
+
+
+
+		
