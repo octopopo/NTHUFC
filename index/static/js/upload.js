@@ -21,15 +21,30 @@ function checkImgNumber(action) {
     }
 }
 
+//click the hidden input type="file"
 function selectImg(){
     document.getElementById('id_nested-'+currentImgID+'-image').click();
-    $(document).ready(function(){
-        $('#id_nested-'+currentImgID+'-image').change(function(e){
-            fileName = e.target.files[0].name;
-            alert('The file "' + fileName +  '" has been selected.');
-            $('#select-txt').val(fileName);
-        });
+}
+//accept the input file change event
+$(document).ready(function(e) {
+    //$('#div_id_nested-'+currentImgID+'-image').find("input").change(function(e){
+    $('.controls .clearablefileinput').change(function(e){
+        fileName = e.target.files[0].name;
+        alert('The file "' + fileName + '" has been selected.');
+        $('#select-txt').val(fileName);
+        readURL(this);
     });
+});
+//read URL to show the preview image
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById("preview_img").style.display = "block";
+            $('#preview_img').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
 }
 
 //setImgInfo except img file url
@@ -50,6 +65,10 @@ function setImgInfo() {
         $('#img-title').val('');
         $('#img-content').val('');
         $('#select-txt').val('');
+        //clean the preview img
+        document.getElementById("preview_img").src = "#";
+        document.getElementById("preview_img").style.display = "none";
+
         changeValidationError('title', 'correct');
         changeValidationError('content', 'correct');
         changeValidationError('txt', 'correct');
@@ -80,6 +99,9 @@ function resetModalForm(){
     //clean img modal
     document.getElementById("popup-img-form").reset();
 
+    //clean the preview img
+    document.getElementById("preview_img").src = "#";
+    document.getElementById("preview_img").style.display = "none";
     //clean the actual img url
     $('#id_nested-'+currentImgID+'-image').val('');
 }
@@ -158,3 +180,4 @@ function changeValidationError(field, status){
         }
     }
 }
+

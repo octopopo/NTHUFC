@@ -1,3 +1,4 @@
+#-*- encoding=UTF-8 -*-
 from django.shortcuts import render, redirect
 from photos.models import Photo
 from users.models import Account
@@ -7,7 +8,7 @@ from django.forms.models import inlineformset_factory
 
 # Create your views here.
 def index(request):
-    title = 'NTHUFC'
+    title = 'Fun攝清華 嬉遊秘境'
     #test related_name
     '''
     test_account = Account.objects.all()[:1].get()

@@ -26,9 +26,7 @@ class Photo(models.Model):
     content = models.TextField(default=None)
     #related_name can reverse foreign krey to one-to-many
     owner = models.ForeignKey(Account, related_name='photos')
-    #tags = models.ManyToManyField(Tag, blank=True, null=True)
     tags = models.CharField(max_length=32, validators=[RegexValidator(regex='^[^ ]{1,10}( [^ ]{1,10}){0,2}$',message='You can only enter at most 3 tags and seperate any 2 tags with a space.')])
-
     location_marker = models.ForeignKey(LocationMarker)
     flickr_photo_id = models.CharField(max_length=50,blank=True)
     flickr_photo_url = models.URLField(max_length=100,blank=True)
