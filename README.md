@@ -12,13 +12,5 @@
 * [python-flickr-api](https://github.com/EelaiWind/python-flickr-api)
 
 ####Authorization Files:
-* put *oauth_verifier.txt* in the project root directory
-* put *authorization_token.py* in photos/
-
-NTHUFC
- |
- +-- oauth_verifier.txt
- |
- +-- photos/
-      |
-      +--authorization_token.py
+* put **oauth_verifier.txt** in the project root directory
+* put **authorization_token.py** in photos/
