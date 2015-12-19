@@ -5,7 +5,7 @@ from users.models import Account
 from index.forms import AccountCreationFrom, PhotoCreationForm
 from django.core.urlresolvers import reverse
 from django.forms.models import inlineformset_factory
-
+from photos.socialApplication import uploadPhoto
 # Create your views here.
 def index(request):
     title = 'Fun攝清華 嬉遊秘境'
@@ -36,7 +36,11 @@ def participate(request, id_account=None):
 
         if form.is_valid() and formset.is_valid():
             form.save()
-            formset.save()
+            photoList = formset.save(commit=False)
+            for photo in photoList:
+                print photo.title
+                photo.save()
+                response = uploadPhoto(photo)
             return redirect(reverse('index:index'))
     else:
 
