@@ -14,3 +14,4 @@ class DemoPhoto(models.Model):
 	marker = models.ForeignKey('Marker');
 	def __unicode__ (self):
 		return self.title;
+		

@@ -193,7 +193,3 @@ def getHasLiked(photo_facebook_id, user_access_token):
 	except Exception, e:
 		print str(e)
 		return False
-
-
-
-		
