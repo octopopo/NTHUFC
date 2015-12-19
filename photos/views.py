@@ -12,10 +12,12 @@ from .models import Photo
 def photos(request):
     return render(request, "photos/photos.html", {})
 
+'''
 def upload(request,photo_id):
 	photo = get_object_or_404(Photo,pk=photo_id)
 	response = uploadPhoto(photo)
 	return render(request, "photos/upload.html", {'response':response})
+'''
 
 #ajax需要csrf_token來驗證
 @ensure_csrf_cookie

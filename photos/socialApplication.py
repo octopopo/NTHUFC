@@ -43,7 +43,7 @@ def uploadPhoto(photo):
 		flickr_response = flickr_api.upload(\
 			photo_file = photo_file_path, 
 			title =photo.title,
-			description = u'地點: '+photo.location_marker.location_text+u'\n拍攝者: '+photo.owner.nickname+'\n\n'+photo.content,
+			description = u'地點: '+photo.location_marker.title+u'\n拍攝者: '+photo.owner.nickname+'\n\n'+photo.content,
 			tags = photo.tags + ' ' + photo.owner.nickname,
 			is_public = 1,
 			is_family = 1,
@@ -74,7 +74,7 @@ def getFacebookPostContent(photo):
 	label = ' '+photo.tags;
 	label = label.replace(' ',' #');
 	return u'{} {}\n===================\n地點: #{}\n拍攝者: #{}\n \n{}\n \n原始圖片連結: https://www.flickr.com/photos/138506275@N05/{}'.format(
-			photo.title, label, photo.location_marker.location_text, photo.owner.nickname, photo.content, photo.flickr_photo_id)
+			photo.title, label, photo.location_marker.title, photo.owner.nickname, photo.content, photo.flickr_photo_id)
 
 def uploadToFacebook(photo):
 	'''
@@ -85,7 +85,7 @@ def uploadToFacebook(photo):
 	photo_file_path = photo.image.url[1:]
 	facebook_response = graph.put_photo(
 		image= open(photo_file_path,'rb'), 
-		message= getFacebookPostCntent(photo)
+		message= getFacebookPostContent(photo)
 	)
 	photo.facebook_post_id = facebook_response['post_id']
 	photo.save()

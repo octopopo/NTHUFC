@@ -19,7 +19,7 @@
 		function getPhotos(photo_id_list, user_access_token){
 			console.log(photo_id_list);
 			$.ajax({
-				url: '{% url "photos:show" %}',
+				url: '{% url "photos:photos" %}',
 				method: 'POST',
 				data:{
 					'csrfmiddlewaretoken': getCookie('csrftoken'),

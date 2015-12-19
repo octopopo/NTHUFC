@@ -1,5 +1,5 @@
 from django.contrib import admin
-from photos.models import Photo, Tag, LocationMarker
+from photos.models import Photo, Tag
 # Register your models here.
 
 class PhotoAdmin(admin.ModelAdmin):
@@ -7,5 +7,4 @@ class PhotoAdmin(admin.ModelAdmin):
 	
 admin.site.register(Photo,PhotoAdmin)
 admin.site.register(Tag)
-admin.site.register(LocationMarker)
 
