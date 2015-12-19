@@ -16,7 +16,6 @@ class UserProfile(models.Model):
 '''
 
 class Account(models.Model):
-
     username = models.CharField(max_length=20, default='', unique=True)
     nickname = models.CharField(max_length=20, default='', unique=True)
 

@@ -14,7 +14,6 @@ class Tag(models.Model):
     tag_name = models.CharField(max_length=20, default='')
     tag_count = models.IntegerField(default=0)
     update_time = models.DateTimeField(default=timezone.now(), blank=False)
-    
     def __unicode__(self):
         return self.tag_name
     
@@ -32,6 +31,14 @@ class Tag(models.Model):
                 if uni_tag.find(uni_word[j:j+i]) > -1:
                     score += i
         return score
+
+class LocationMarker(models.Model):
+    location_text = models.CharField(max_length=10)
+    latitude = models.DecimalField(max_digits=18, decimal_places=15);
+    longitude = models.DecimalField(max_digits=18, decimal_places=15);
+
+    def __unicode__(self):
+        return self.location_text;
 
 class Photo(models.Model):
     title = models.CharField(max_length=30)
