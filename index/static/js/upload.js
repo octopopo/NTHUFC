@@ -18,6 +18,7 @@ function checkImgNumber(action) {
             showMsgModal('At least submit one photo!');
             return false;
         }
+        showMsgModal('Photos are uploading...');
     }
 }
 
