@@ -16,7 +16,7 @@ class Tag(models.Model):
     update_time = models.DateTimeField(default=timezone.now, blank=False)
     def __unicode__(self):
         return self.tag_name
-    
+
     #比較某個詞跟這個標籤相似性
     def similarity(self, word):
         score = 0
