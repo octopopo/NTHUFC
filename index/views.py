@@ -6,18 +6,20 @@ from index.forms import AccountCreationFrom, PhotoCreationForm
 from django.core.urlresolvers import reverse
 from django.forms.models import inlineformset_factory
 
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+from index.forms import LoginForm
 # Create your views here.
 def index(request):
-    title = 'Fun攝清華 嬉遊秘境'
     #test related_name
     '''
     test_account = Account.objects.all()[:1].get()
     all_photos = test_account.photos.all()
     '''
-    return render(request, "index/index.html", {"title":title})
+    return render(request, "index/index.html", {})
 
 def participate(request, id_account=None):
-    title = 'Participate'
     if id_account is None:
         account = Account()
         PhotoInlineFormSet = inlineformset_factory(Account, Photo,
@@ -44,4 +46,24 @@ def participate(request, id_account=None):
         formset = PhotoInlineFormSet(instance=account, prefix="nested")
 
 
-    return render(request, "index/participate.html", {"title": title,"form":form, "formset": formset})
+    return render(request, "index/participate.html", {"form":form, "formset": formset})
+
+def login(request):
+    F = LoginForm
+    if request.method == 'GET':
+        form = F()
+    else:
+        form = F(data=request.POST)
+        if form.is_valid():
+            user = authenticate(
+                username=form.cleaned_data['username'],
+                email=form.cleaned_data['email'])
+            if user:
+                auth_login(request,user)
+                return redirect(reverse('index:index'))
+    ctx = {'form': form}
+    return render(request, 'index/login.html', ctx)
+
+def logout(request):
+    auth_logout(request)
+    return redirect(reverse('index:index'))

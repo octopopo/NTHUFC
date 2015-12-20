@@ -53,6 +53,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+AUTHENTICATION_BACKENDS = (
+    'users.backends.EmailAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 ROOT_URLCONF = 'NTHUFC.urls'
 
 WSGI_APPLICATION = 'NTHUFC.wsgi.application'
