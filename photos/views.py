@@ -12,12 +12,12 @@ from .models import Photo
 def photos(request):
     return render(request, "photos/photos.html", {})
 
-
+'''
 def upload(request,photo_id):
 	photo = get_object_or_404(Photo,pk=photo_id)
 	response = uploadPhoto(photo)
 	return render(request, "photos/upload.html", {'response':response})
-
+'''
 
 #ajax需要csrf_token來驗證
 @ensure_csrf_cookie
@@ -43,7 +43,7 @@ def ajax_post_comment(request):
 	access_token = request.POST.get('access_token','')
 	photo_facebook_id = request.POST.get('photo_facebook_id','')
 	comment_text = request.POST.get('comment_text','')
-	
+
 	if access_token == '' or photo_facebook_id=='' or comment_text=='':
 		return JsonResponse({'status':'error', 'message':'post data missing'})
 	else:
@@ -62,7 +62,7 @@ def ajax_post_like(request):
 		context={}
 		if photo_facebook_id !='':
 			context['facebook_likes'] = postLike(user_access_token,photo_facebook_id)
-		
+
 		hasLiked_list = []
 		for id in  photo_list:
 			try:
