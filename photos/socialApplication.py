@@ -34,7 +34,7 @@ def uploadPhoto(photo):
 		Flickr驗證會用到 oauth_verifier.txt ，要放在 NTHUFC 根目錄中
 		authorization_token.py 存放 Facebook 和 Flickr 驗證會用到的資訊，不要放到 github 上
 	'''
-	photo_file_path = photo.image.url[1:]
+	photo_file_path = photo.image.path
 	result = {}
 
 	if photo.flickr_photo_id=='':
@@ -82,7 +82,7 @@ def uploadToFacebook(photo):
 	'''
 	graph = facebook.GraphAPI(access_token=__facebook_page_token, version='2.5')
 	
-	photo_file_path = photo.image.url[1:]
+	photo_file_path = photo.image.path
 	facebook_response = graph.put_photo(
 		image= open(photo_file_path,'rb'), 
 		message= getFacebookPostContent(photo)
@@ -99,7 +99,7 @@ def updateFlickrPhotoURL(photo):
 	
 	facebook_response = graph.update_photo(
 		facebook_post_id=photo.facebook_post_id,
-		message= getFacebookPostCntent(photo)
+		message= getFacebookPostContent(photo)
 	)
 	return facebook_response
 
