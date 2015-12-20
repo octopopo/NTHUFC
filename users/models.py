@@ -35,3 +35,7 @@ class Account(models.Model):
     cellphone = models.CharField(max_length=10, unique=True, validators=[RegexValidator(regex='^\d{10}$', message='Invalid number', code='Invalid number')])
     def __unicode__(self):
         return self.username
+
+    '''custom authentication resolve 'is_authenticated' problem'''
+    def is_authenticated(self):
+        return True

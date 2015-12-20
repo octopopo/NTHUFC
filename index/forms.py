@@ -103,11 +103,10 @@ class LoginForm(forms.Form):
     def clean_email(self):
         username = self.cleaned_data.get("username")
         email = self.cleaned_data.get("email")
-        print username
-        print email
+
         try:
-            user = User.objects.get(username=username, email=email)
-        except User.DoesNotExist:
+            user = Account.objects.get(username=username, email=email)
+        except Account.DoesNotExist:
             raise forms.ValidationError("Username or email is wrong.")
 
         return email
