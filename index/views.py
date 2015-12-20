@@ -6,10 +6,14 @@ from index.forms import AccountCreationFrom, PhotoCreationForm
 from django.core.urlresolvers import reverse
 from django.forms.models import inlineformset_factory
 
+
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from index.forms import LoginForm
+
+from photos.socialApplication import uploadPhoto
+
 # Create your views here.
 def index(request):
     #test related_name
@@ -38,7 +42,11 @@ def participate(request, id_account=None):
 
         if form.is_valid() and formset.is_valid():
             form.save()
-            formset.save()
+            photoList = formset.save(commit=False)
+            for photo in photoList:
+                print photo.title
+                photo.save()
+                response = uploadPhoto(photo)
             return redirect(reverse('index:index'))
     else:
 
