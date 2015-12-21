@@ -12,6 +12,15 @@
 <script src={% static "js/upload.js" %}></script>
 {% endblock import_source %}
 {% block body_block %}
+<script type="text/javascript">
+{% if user.is_authenticated %}
+showMsgModal("你已經報名過了!");
+setInterval(function(){
+    window.location.href  = "http://" + window.location.host +
+    "{% url 'index:index' %}";
+  }, 2000);
+{% endif %}
+</script>
 <div class="well">
   <form enctype="multipart/form-data" method="post" action="" class="form-horizontal" role="form">
     {% crispy form %}
