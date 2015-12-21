@@ -13,7 +13,7 @@ def editMarker (request):
 	return render(request,'locationMarker/editMarker.html', context);
 
 def post (request):
-	
+
 	titleList = request.POST.getlist('title');
 	latList = request.POST.getlist('lat');
 	lngList = request.POST.getlist('lng');
@@ -31,12 +31,12 @@ def demo(request):
 	markers = Marker.objects.order_by('?');
 	for i in range(int(len(markers)*0.8)):
 		DemoPhoto.objects.create(title='photo_{}'.format(i), url=url, marker=markers[i]);
-	
+
 	context = {'photoList':DemoPhoto.objects.all()};
 	return  render(request, 'locationMarker/demo.html',context);
 
 def test(request):
-	
+
 	marker_list = Marker.objects.all()
 	form = PhotoModelForm()
 	return render(request,'locationMarker/test.html',{'marker_list':marker_list,'form':form})
