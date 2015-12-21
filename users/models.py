@@ -42,3 +42,23 @@ class Account(models.Model):
     '''custom authentication resolve 'is_authenticated' problem'''
     def is_authenticated(self):
         return True
+
+    @property
+    def is_superuser(self):
+        return self.is_admin
+
+    def is_active(self):
+        return True
+
+    def is_admin(self):
+        return False
+
+    @property
+    def is_staff(self):
+        return self.is_admin
+
+    def has_perm(self, perm, obj=None):
+        return self.is_admin
+
+    def has_module_perms(self, app_label):
+        return self.is_admin

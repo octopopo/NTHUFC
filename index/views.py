@@ -68,7 +68,7 @@ def login(request):
                 email=form.cleaned_data['email'])
             if user:
                 auth_login(request,user)
-                return redirect(reverse('index:index'))
+                return redirect(reverse('users:profile'))
     ctx = {'form': form}
     return render(request, 'index/login.html', ctx)
 
