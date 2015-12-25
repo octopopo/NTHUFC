@@ -7,6 +7,7 @@ from users.models import Account
 from locationMarker.models import Marker
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+import os, re
 
 # Create your models here.
 class Tag(models.Model):
@@ -38,7 +39,8 @@ def getDefaultMarker():
 	return Marker.objects.all()[0].id;
 
 def getFilePath(instance, filname):
-	return 'uploads/images/'+str(timezone.now())
+	timeStr = str(timezone.now())
+	return os.path.join('uploads','images',re.sub('\W','_',timeStr))
 
 class Photo(models.Model):
     title = models.CharField(max_length=30)
