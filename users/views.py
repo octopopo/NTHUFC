@@ -6,13 +6,39 @@ from django.contrib.auth import logout as auth_logout
 from users.forms import LoginForm
 from django.core.urlresolvers import reverse
 from photos.models import Photo
+from users.models import Account
+from index.forms import AccountCreationFrom, PhotoCreationForm
+from django.forms.models import inlineformset_factory
+
+from photos.socialApplication import uploadPhoto
 # Create your views here.
 
 @login_required
 def users(request):
     account = request.user
     photos = account.photos.all()
-    return render(request, "users/profile.html", {"photos": photos})
+    #print photos.count()
+    form_number = 5 - photos.count();
+    PhotoInlineFormSet = inlineformset_factory(Account, Photo,
+    form=PhotoCreationForm, max_num=5, validate_max=True,
+        min_num=1, validate_min=True, extra=form_number, can_delete=True)
+
+    if request.method == "POST":
+        #form = AccountCreationFrom(request.POST, request.FILES, instance=account, prefix="main")
+        formset = PhotoInlineFormSet(request.POST, request.FILES, instance=account, prefix="nested")
+        #if form.is_valid() and formset.is_valid():
+        if formset.is_valid():
+            photoList = formset.save(commit=False)
+            for photo in photoList:
+                print photo.title
+                photo.save()
+                response = uploadPhoto(photo)
+            return redirect(reverse('users:profile'))
+    else:
+        #form = AccountCreationFrom(instance=account, prefix="main")
+        formset = PhotoInlineFormSet(instance=account, prefix="nested")
+
+    return render(request, "users/profile.html", {"photos": photos, "formset": formset})
 
 def login(request):
     F = LoginForm

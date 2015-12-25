@@ -3,6 +3,13 @@ var currentImgID = 0;
 var nameset = '';
 var fileName = '';
 var firstfile = true;
+var page;
+
+function init(number, page_name){
+    imgNumber = number;
+    currentImgID = number;
+    page = page_name;
+}
 //check img number whether exceed 5
 function checkImgNumber(action) {
     if(action == 'upload'){
@@ -90,9 +97,11 @@ function setImgInfo() {
             firstfile = !firstfile;
         }
 
-        //set upload-img-btn name
-        if(imgNumber >= 1)
-            $('#upload-btn').val('Upload another image');
+        //profile page
+        if(page == 'profile'){
+            document.getElementById('profile_update').click();
+        }
+
     }
 }
 
@@ -116,7 +125,7 @@ function resetParticipateForm(){
     document.getElementById("img-nameset").rows = 1;
 
     //reset upload-img-btn name
-    $('#upload-btn').val('Upload image');
+    $('#upload-btn').val('上傳');
 
     firstfile = true;
 }

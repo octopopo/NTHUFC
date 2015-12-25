@@ -1,61 +1,30 @@
 <!DOCTYPE html>
 {% extends "index/base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title_name %}
   <title>Profile</title>
 {% endblock title_name %}
 {% block import_source %}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" href={% static "css/profile.css" %} media="screen">
+<link rel="stylesheet" href={% static "css/participate.css" %} media="screen">
 <script src={% static "js/profile.js" %}></script>
+<script src={% static "js/upload.js" %}></script>
 <script src={% static "js/jquery.popconfirm.js" %}></script>
-<style>
-  #hover-cap-4col .thumbnail,
-  #hover-cap-3col .thumbnail,
-  #hover-cap-unique .thumbnail,
-  #hover-cap-6col .thumbnail {
-    position:relative;
-    overflow:hidden;
-  }
-  .caption {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: rgba(0,0,0,0.4);
-    width: 100%;
-    height: 100%;
-    color:#fff !important;
-  }
-  .caption p {
-    padding:6px;
-  }
-  .thumbnail img {
-    min-width: 100px;
-  }
-  .span3 {
-    width:300px;
-  }
-  .caption p {
-    position: relative;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-    text-align: center;
-  }
-  .caption a {
-    margin: 10px;
-  }
-</style>
 <script type="text/javascript">
-
+  init({{ photos.count }}, 'profile');
 </script>
 {% endblock import_source %}
 {% block body_block %}
 <div class="container">
-  <div class="page-header">
-    <h1>{{ user.username }}</h1>
+  <div class="page-header" style="display: inline;">
+    <h1 style="text-align:left;float:left;">{{ user.username }}</h1>
+    {% if photos.count < 5 %}
+    <input type="button" class="btn btn-success" value="上傳" onclick="checkImgNumber('upload');" id="upload-btn">
+    {% endif %}
+    <hr style="clear:both;"/>
   </div>
   <div class="row thumbnails" id="hover-cap-4col">
     {% for photo in photos %}
@@ -71,7 +40,7 @@
               <i class="fa fa-facebook-square fa-3x" style="color: #3b5998;"></i>
             </a>
             <a href="#" rel="tooltip" title="delete" class="popconfirm test-jquery-click" id="{{ photo.id }}">
-              <i class="fa fa-times fa-3x" style="color: black;"></i>
+              <i class="fa fa-times fa-3x" style="color: red;"></i>
             </a>
           </p>
         </div>
@@ -80,5 +49,15 @@
     </div>
     {% endfor %}
   </div>
+  <div class="well" style="display: none;">
+    <form enctype="multipart/form-data" method="post" action="" class="form-horizontal" role="form">
+      {% crispy formset formset.form.helper %}
+      <div id="submit-btn">
+        <input class="btn" type="submit" value="" id="profile_update" onclick="return checkImgNumber('submit');">
+      </div>
+    </form>
+  </div>
 </div>
+
+{% include "index/upload_modal.html" %}
 {% endblock body_block %}

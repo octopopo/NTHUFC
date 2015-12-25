@@ -47,6 +47,4 @@ def participate(request, id_account=None):
         form = AccountCreationFrom(instance=account, prefix="main")
         formset = PhotoInlineFormSet(instance=account, prefix="nested")
 
-
     return render(request, "index/participate.html", {"form":form, "formset": formset})
-
