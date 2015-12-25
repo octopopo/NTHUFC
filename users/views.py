@@ -9,7 +9,9 @@ from django.core.urlresolvers import reverse
 
 @login_required
 def users(request):
-    return render(request, "users/profile.html", {})
+    account = request.user
+    photos = account.photos.all()
+    return render(request, "users/profile.html", {"photos": photos})
 
 def login(request):
     F = LoginForm

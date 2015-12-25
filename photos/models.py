@@ -61,5 +61,3 @@ class Photo(models.Model):
         for tag in self.tags:
             tagString += tag.tag_name;
         return tagString;
-
-
