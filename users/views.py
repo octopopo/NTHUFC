@@ -5,6 +5,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from users.forms import LoginForm
 from django.core.urlresolvers import reverse
+from photos.models import Photo
 # Create your views here.
 
 @login_required
@@ -32,3 +33,14 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect(reverse('index:index'))
+
+@login_required()
+def delete_photo(request, delete_id):
+    if delete_id != '':
+        try:
+            Photo.objects.filter(id=long(delete_id)).delete()
+            print('Photo id %ld deletes successfully!' % long(delete_id))
+        except Photo.DoesNotExist:
+            print('Photo id %ld does not exist!' % long(delete_id))
+
+    return redirect(reverse('users:profile'))
