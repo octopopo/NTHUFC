@@ -38,9 +38,8 @@ def participate(request, id_account=None):
             form.save()
             photoList = formset.save(commit=False)
             for photo in photoList:
-                print photo.title
                 photo.save()
-                response = uploadPhoto(photo)
+                uploadPhoto(photo)
             return redirect(reverse('index:index'))
     else:
 
