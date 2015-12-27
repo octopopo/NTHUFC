@@ -3,14 +3,19 @@
 {% load static %}
 
 {% block title_name %}
-  <title>{{ title }}</title>
+  <title>Fun攝清華 嬉遊秘境</title>
 {% endblock title_name %}
 {% block import_source %}
 <link rel="stylesheet" href={% static "css/index.css" %} media="screen">
 {% endblock import_source %}
 {% block body_block %}
 <center>
-  <h1 style="margin-top: 0px;">Film Contest</h1>
+  <!-- test related_name
+  {% for photo in all_photos %}
+    {{ photo.title }}
+  {% endfor %}
+  -->
+  <h1 style="margin-top: 0px;">六十週年校慶攝影比賽</h1>
   <hr>
   <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
@@ -68,6 +73,5 @@
   </div>
   <br><br>
   <a href="{% url 'index:participate' %}" class="btn btn-primary">Participate</a>
-  <br><br>
 </center>
 {% endblock body_block %}

@@ -1,10 +1,50 @@
-from django.shortcuts import render
+#-*- encoding=UTF-8 -*-
+from django.shortcuts import render, redirect
+from photos.models import Photo
+from users.models import Account
+from index.forms import AccountCreationFrom, PhotoCreationForm
+from django.core.urlresolvers import reverse
+from django.forms.models import inlineformset_factory
+
+from photos.socialApplication import uploadPhoto
 
 # Create your views here.
 def index(request):
-    title = 'NTHUFC'
-    return render(request, "index/index.html", {"title":title})
+    #test related_name
+    '''
+    test_account = Account.objects.all()[:1].get()
+    all_photos = test_account.photos.all()
+    '''
+    return render(request, "index/index.html", {})
 
-def participate(request):
-    title = 'Participate'
-    return render(request, "index/participate.html", {"title":title})
+def participate(request, id_account=None):
+    if id_account is None:
+        account = Account()
+        PhotoInlineFormSet = inlineformset_factory(Account, Photo,
+            form=PhotoCreationForm, max_num=5, validate_max=True,
+            min_num=1, validate_min=True, extra=5, can_delete=False)
+    else:
+        account = Account.objects.get(pk=id_account)
+        PhotoInlineFormSet = inlineformset_factory(Account, Photo,
+            form=PhotoCreationForm, max_num=5, validate_max=True,
+            min_num=1, validate_min=True, extra=5, can_delete=True)
+
+
+    if request.method == "POST":
+        form = AccountCreationFrom(request.POST, request.FILES, instance=account, prefix="main")
+        formset = PhotoInlineFormSet(request.POST, request.FILES, instance=account, prefix="nested")
+
+        if form.is_valid() and formset.is_valid():
+            form.save()
+            photoList = formset.save(commit=False)
+            for photo in photoList:
+                print photo.title
+                photo.save()
+                response = uploadPhoto(photo)
+            return redirect(reverse('index:index'))
+    else:
+
+        form = AccountCreationFrom(instance=account, prefix="main")
+        formset = PhotoInlineFormSet(instance=account, prefix="nested")
+
+    return render(request, "index/participate.html", {"form":form, "formset": formset})

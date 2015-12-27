@@ -40,6 +40,8 @@ INSTALLED_APPS = (
     'index',
     'photos',
     'users',
+    'crispy_forms',
+    'locationMarker',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -52,6 +54,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+AUTHENTICATION_BACKENDS = (
+    'users.backends.EmailAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 ROOT_URLCONF = 'NTHUFC.urls'
 
 WSGI_APPLICATION = 'NTHUFC.wsgi.application'
@@ -59,6 +66,7 @@ WSGI_APPLICATION = 'NTHUFC.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
+
 CONFIG_PATH = os.path.join(BASE_DIR, 'NTHUFC/config/NTHUFC.cfg')
 
 DATABASES = {
@@ -68,7 +76,15 @@ DATABASES = {
             'read_default_file': CONFIG_PATH,
         },
     }
+};
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
+'''
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -92,3 +108,6 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+#django-crispy-forms setting
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
