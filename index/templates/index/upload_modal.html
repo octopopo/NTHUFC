@@ -1,4 +1,18 @@
 <!-- Modal -->
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAl62RoU1i9n0MzNAmw8fcKGTVPryxNJLM&callback=">
+</script>
+
+<script type="text/javascript">
+  var marker_list = []
+  {% for marker in marker_list %}
+    marker_list.push({'title': '{{marker.title}}', 'lat':{{marker.latitude}}, 'lng': {{marker.longitude}} })
+  {% endfor %}
+  initMarker(marker_list)
+
+</script>
+
 <div class="modal fade" id="image-Modal" tabindex="-1" role="dialog" aria-labelledby="image-ModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -18,6 +32,20 @@
             <span class="asteriskField">*</span>
             <textarea class="form-control" id="img-content"></textarea>
           </div>
+
+          <div class="form-group">
+            <label for="image-tags" class="control-label" requiredField>Tags:</label>
+            <span class="asteriskField">*</span>
+            <input class="form-control" id="img-tags"><br>
+          </div>
+
+          <div class="form-group">
+            <label for="image-location" class="control-label" requiredField>Location:</label>
+            <span class="asteriskField">*</span>
+            <input class="form-control" id="img-location" disabled><br>
+            <div id='google_map' style='width:400px; height:300px;' ></div>
+          </div>
+
           <div class="form-group" style="text-align: right;">
             <div style="text-align: left;">
               <label for="img-name" class="control-label" requiredField>Image:</label>

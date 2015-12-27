@@ -9,7 +9,7 @@ from photos.models import Photo
 from users.models import Account
 from index.forms import AccountCreationFrom, PhotoCreationForm
 from django.forms.models import inlineformset_factory
-
+from locationMarker.models import Marker
 from photos.socialApplication import uploadPhoto, deletePhoto
 # Create your views here.
 
@@ -31,13 +31,13 @@ def users(request):
             photoList = formset.save(commit=False)
             for photo in photoList:
                 photo.save()
-                response = uploadPhoto(photo)
+                uploadPhoto(photo)
             return redirect(reverse('users:profile'))
     else:
         #form = AccountCreationFrom(instance=account, prefix="main")
         formset = PhotoInlineFormSet(instance=account, prefix="nested")
 
-    return render(request, "users/profile.html", {"photos": photos, "formset": formset})
+    return render(request, "users/profile.html", {"photos": photos, "formset": formset, "marker_list": Marker.objects.all()})
 
 def login(request):
     F = LoginForm

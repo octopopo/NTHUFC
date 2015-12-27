@@ -5,7 +5,7 @@ from users.models import Account
 from index.forms import AccountCreationFrom, PhotoCreationForm
 from django.core.urlresolvers import reverse
 from django.forms.models import inlineformset_factory
-
+from locationMarker.models import Marker
 from photos.socialApplication import uploadPhoto
 
 # Create your views here.
@@ -46,4 +46,4 @@ def participate(request, id_account=None):
         form = AccountCreationFrom(instance=account, prefix="main")
         formset = PhotoInlineFormSet(instance=account, prefix="nested")
 
-    return render(request, "index/participate.html", {"form":form, "formset": formset})
+    return render(request, "index/participate.html", {"form":form, "formset": formset, "marker_list": Marker.objects.all()})

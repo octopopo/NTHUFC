@@ -4,6 +4,8 @@ var nameset = '';
 var fileName = '';
 var firstfile = true;
 var page;
+var google_map;
+var markerList = [];
 
 function init(number, page_name){
     imgNumber = number;
@@ -15,6 +17,10 @@ function checkImgNumber(action) {
     if(action == 'upload'){
         if(imgNumber <= 4){
             $('#image-Modal').modal('toggle');
+            $('#image-Modal').on('shown.bs.modal', function () {
+                //google.maps.event.trigger(google_map, "resize");
+                initMap();
+            });
         }
         else{
             showMsgModal('Max photo number is five!');
@@ -66,12 +72,23 @@ function setImgInfo() {
         $('#image-Modal').modal('toggle');
         var title = $('#img-title').val();
         var content = $('#img-content').val();
+        var tags_text = $('#img-tags').val()
+        var location_text = $('#img-location').val();
+
         $('#id_nested-'+currentImgID+'-title').val(title);
         $('#id_nested-'+currentImgID+'-content').val(content);
-
+        $('#id_nested-'+currentImgID+'-tags').val(tags_text);
+        $('#id_nested-'+currentImgID+'-location_marker').children().each(function(){
+            console.log($(this).text())
+            if ($(this).text() == location_text){
+                $(this).attr("selected", true);
+            }
+        });
         //clean after close modal
         $('#img-title').val('');
         $('#img-content').val('');
+        $('#img-tgs').val('')
+        $('#img-location').val('');
         $('#select-txt').val('');
         //clean the preview img
         document.getElementById("preview_img").src = "#";
@@ -79,6 +96,8 @@ function setImgInfo() {
 
         changeValidationError('title', 'correct');
         changeValidationError('content', 'correct');
+        changeValidationError('tags', 'correct');
+        changeValidationError('location', 'correct');
         changeValidationError('txt', 'correct');
 
 
@@ -148,6 +167,30 @@ function validationError(){
     else
         changeValidationError('content', 'correct');
 
+    console.log(/^[^ ]{1,10}( [^ ]{1,10}){0,2}$/.test($('#img-tags').val()))
+    if(/^[^ ]{1,10}( [^ ]{1,10}){0,2}$/.test($('#img-tags').val())){
+        changeValidationError('tags', 'correct');
+    }
+    else{
+        changeValidationError('tags', 'wrong');
+        valid = false;
+    }
+
+    isLocationValid = false;
+    for (i in markerList){
+        if (markerList[i].title == $('#img-location').val() ){
+            isLocationValid = true;
+            break;
+        }
+    }
+
+    if(isLocationValid == false){
+        changeValidationError('location', 'wrong');
+        valid = false;
+    }
+    else
+        changeValidationError('location', 'correct');
+
     if($('#select-txt').val() == ''){
         changeValidationError('txt', 'wrong');
         valid = false;
@@ -179,15 +222,66 @@ function changeValidationError(field, status){
             $('#popup-img-form .asteriskField:eq(1)').css("color","#222222");
         }
     }
-    else if(field == 'txt'){
+    else if(field == 'tags'){
         if(status == 'wrong'){
             $('#popup-img-form .form-group:eq(2)').addClass('has-error');
-            $('#popup-img-form .asteriskField:eq(2)').css("color","#f04124");
+            $('#popup-img-form .asteriskField:eq(2)').html('請輸入1~3個標籤(每個最多10個字)，兩個標籤之間要有1個空白').css("color","#f04124");
         }
         else{
             $('#popup-img-form .form-group:eq(2)').removeClass('has-error');
-            $('#popup-img-form .asteriskField:eq(2)').css("color","#222222");
+            $('#popup-img-form .asteriskField:eq(2)').html('*').css("color","#222222");
+        }
+    }
+    else if(field == 'location'){
+        if(status == 'wrong'){
+            $('#popup-img-form .form-group:eq(3)').addClass('has-error');
+            $('#popup-img-form .asteriskField:eq(3)').css("color","#f04124");
+        }
+        else{
+            $('#popup-img-form .form-group:eq(3)').removeClass('has-error');
+            $('#popup-img-form .asteriskField:eq(3)').css("color","#222222");
+        }
+    }
+    else if(field == 'txt'){
+        if(status == 'wrong'){
+            $('#popup-img-form .form-group:eq(4)').addClass('has-error');
+            $('#popup-img-form .asteriskField:eq(4)').css("color","#f04124");
+        }
+        else{
+            $('#popup-img-form .form-group:eq(4)').removeClass('has-error');
+            $('#popup-img-form .asteriskField:eq(4)').css("color","#222222");
         }
     }
 }
 
+function initMap() {
+    var myLatLng = {lat: 24.7913341, lng: 120.994148};
+
+    var mapOptions = {
+        zoom: 16,
+        center: myLatLng,
+    };
+    google_map = new google.maps.Map(document.getElementById('google_map'),mapOptions);
+    for ( i in markerList){
+        addMarker(google_map, markerList[i].title, {lat: markerList[i].lat, lng: markerList[i].lng})
+    }
+    console.log('google map loading finish')
+}
+
+function addMarker(map, title, location){
+    var marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        label: title,
+        title: title,
+    });
+
+    marker.addListener('click', function() {
+        $('#img-location').val(marker.title)
+        google_map.setCenter(marker.getPosition())
+    });
+}
+
+function initMarker(markers){
+    markerList = markers
+}
