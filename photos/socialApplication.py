@@ -2,8 +2,18 @@
 import flickr_api
 import facebook
 import json
+import time
+import threading
 from .authorization_token import __facebook_page_token, __flickr_api_key, __flickr_api_secret
 from .models import Photo
+
+def run_in_thread(func):
+	'''
+		used for decorator
+	'''
+	def thread_func(*args, **kwargs):
+		threading.Thread(target=func, args=args, kwargs=kwargs).start()
+	return thread_func
 
 class Comment(object):
 	'''
@@ -22,12 +32,13 @@ class Comment(object):
 
 	def toDict(self):
 		return {
-			'user_name':self.user_name, 
-			'user_photo_url':self.user_photo_url, 
+			'user_name':self.user_name,
+			'user_photo_url':self.user_photo_url,
 			'comment_text': self.comment_text,
 			'comment_facebook_id': self.comment_facebook_id,
 		}
 
+@run_in_thread
 def uploadPhoto(photo):
 	'''
 		先將照片上傳到 Flickr，再張貼到 Facebook。
@@ -38,25 +49,34 @@ def uploadPhoto(photo):
 	result = {}
 
 	if photo.flickr_photo_id=='':
+		try_count = 3
 		flickr_api.set_keys(api_key = __flickr_api_key, api_secret = __flickr_api_secret)
 		flickr_api.set_auth_handler('oauth_verifier.txt')
-		flickr_response = flickr_api.upload(\
-			photo_file = photo_file_path, 
-			title =photo.title,
-			description = u'地點: '+photo.location_marker.title+u'\n拍攝者: '+photo.owner.nickname+'\n\n'+photo.content,
-			tags = photo.tags + ' ' + photo.owner.nickname,
-			is_public = 1,
-			is_family = 1,
-			is_friend = 1,
-			safety_level =1,
-			content_type  =1,
-			hidden = 1,
-		)
-		photo.flickr_photo_id = flickr_response.id
-		photo_info = flickr_response.getInfo()
-		photo.flickr_photo_url = 'https://farm{}.staticflickr.com/{}/{}_{}.jpg'.format(photo_info['farm'], photo_info['server'], flickr_response.id, photo_info['secret'])
-		photo.save()
-		result['flickr_response'] = flickr_response
+
+		while try_count > 0 :
+			try :
+				flickr_response = flickr_api.upload(
+					photo_file = photo_file_path,
+					title =photo.title,
+					description = u'地點: '+photo.location_marker.title+u'\n拍攝者: '+photo.owner.nickname+'\n\n'+photo.content,
+					tags = photo.tags,
+					is_public = 1,
+					is_family = 1,
+					is_friend = 1,
+					safety_level =1,
+					content_type  =1,
+					hidden = 1,
+				)
+				photo.flickr_photo_id = flickr_response.id
+				photo_info = flickr_response.getInfo()
+				photo.flickr_photo_url = 'https://farm{}.staticflickr.com/{}/{}_{}.jpg'.format(photo_info['farm'], photo_info['server'], flickr_response.id, photo_info['secret'])
+				photo.save()
+				result['flickr_response'] = flickr_response
+				break;
+			except Exception as e:
+				print str(e)
+				try_count -= 1
+			time.sleep(1)
 	else:
 		result['flickr_response'] = 'already upload to flickr'
 
@@ -65,26 +85,32 @@ def uploadPhoto(photo):
 	else:
 		result['facebook_response'] = updateFlickrPhotoURL(photo)
 
+	print 'uploadPhotoresult' + str(result)
 	return result
 
-def getFacebookPostContent(photo):
+def getFacebookPostContent(photo, isValid=True):
 	'''
 		產生Facebook的貼文內容，會在標籤地點跟拍攝者前面加上'#'形成facebook的tag
 	'''
 	label = ' '+photo.tags;
 	label = label.replace(' ',' #');
-	return u'{} {}\n===================\n地點: #{}\n拍攝者: #{}\n \n{}\n \n原始圖片連結: https://www.flickr.com/photos/138506275@N05/{}'.format(
+
+	if isValid:
+		return u'{} {}\n===================\n地點: #{}\n拍攝者: #{}\n\n{}\n \n原始圖片連結: https://www.flickr.com/photos/138506275@N05/{}'.format(
 			photo.title, label, photo.location_marker.title, photo.owner.nickname, photo.content, photo.flickr_photo_id)
+	else:
+		return u'[無效]{} {} \n===================\n地點: #{}\n[這張照片已經被投稿者移除，它的票數不會列入計分]\n\n{}\n \n原始圖片連結: https://www.flickr.com/photos/138506275@N05/{}'.format(
+			photo.title, label, photo.location_marker.title, photo.content, photo.flickr_photo_id)
 
 def uploadToFacebook(photo):
 	'''
 		將新的照片張貼到Facebook，並把貼文ID存起來
 	'''
 	graph = facebook.GraphAPI(access_token=__facebook_page_token, version='2.5')
-	
+
 	photo_file_path = photo.image.path
 	facebook_response = graph.put_photo(
-		image= open(photo_file_path,'rb'), 
+		image= open(photo_file_path,'rb'),
 		message= getFacebookPostContent(photo)
 	)
 	photo.facebook_post_id = facebook_response['post_id']
@@ -96,7 +122,7 @@ def updateFlickrPhotoURL(photo):
 		如果該篇照片已經有Facebook貼文的ID，那就更新貼文內容而不要重新張貼
 	'''
 	graph = facebook.GraphAPI(access_token=__facebook_page_token, version='2.5')
-	
+
 	facebook_response = graph.update_photo(
 		facebook_post_id=photo.facebook_post_id,
 		message= getFacebookPostContent(photo)
@@ -112,14 +138,14 @@ def getPhotoDetails(photo, user_access_token):
 	graph = facebook.GraphAPI(access_token=__facebook_page_token, version='2.5')
 	response = graph.get_object(id=photo.facebook_post_id, fields=__facebook_query_field)
 	comment_list = []
-	
+
 	if 'comments' in response:
 		for item in response['comments']['data']:
 			comment_list.append(
 				Comment(
-					user_name=item['from']['name'], 
+					user_name=item['from']['name'],
 					user_photo_url=item['from']['picture']['data']['url'],
-					comment_text=item['message'], 
+					comment_text=item['message'],
 					comment_facebook_id=item['id'],
 				)
 			)
@@ -129,8 +155,8 @@ def getPhotoDetails(photo, user_access_token):
 	flickr_api.set_auth_handler('oauth_verifier.txt')
 	favorites = flickr_api.Photo(id = photo.flickr_photo_id).getFavorites()
 
-	return { 
-		'facebook_likes': facebook_likes, 
+	return {
+		'facebook_likes': facebook_likes,
 		'facebook_post_id': photo.facebook_post_id,
 		'comment_list': [ x.toDict() for x in comment_list],
 		'flickr_favorites': len(favorites),
@@ -156,9 +182,9 @@ def postComment(access_token, photo_facebook_id, comment_text):
 		for item in response['comments']['data']:
 			comment_list.append(
 				Comment(
-					user_name=item['from']['name'], 
+					user_name=item['from']['name'],
 					user_photo_url=item['from']['picture']['data']['url'],
-					comment_text=item['message'], 
+					comment_text=item['message'],
 					comment_facebook_id=item['id'],
 				)
 			)
@@ -193,3 +219,33 @@ def getHasLiked(photo_facebook_id, user_access_token):
 	except Exception, e:
 		print str(e)
 		return False
+
+@run_in_thread
+def deletePhoto(photo):
+	result = {}
+	graph = facebook.GraphAPI(access_token=__facebook_page_token, version='2.5')
+	facebook_response = graph.update_photo(
+		facebook_post_id=photo.facebook_post_id,
+		message= getFacebookPostContent(photo,isValid=False)
+	)
+
+	flickr_api.set_keys(api_key = __flickr_api_key, api_secret = __flickr_api_secret)
+	flickr_api.set_auth_handler('oauth_verifier.txt')
+	uni_title = u'[無效] '+photo.title
+	uni_title = uni_title.encode('utf-8')
+	uni_description = u'[這張照片已經被投稿者移除，它的票數不會列入計分]\n\n'+photo.content
+	uni_description = uni_description.encode('utf-8')
+
+	flick_response = flickr_api.objects.Photo(
+        id=photo.flickr_photo_id,
+        editurl='https://www.flickr.com/photos/upload/edit/?ids=' + photo.flickr_photo_id
+    ).setMeta(
+    	title =uni_title,
+		description = uni_description,
+	)
+
+	result['facebook_response'] = facebook_response
+	result['flick_response'] = flick_response
+
+	print 'deletePhoto result:'+str(result)
+	return result

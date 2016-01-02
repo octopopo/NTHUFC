@@ -10,7 +10,7 @@ from users.models import Account
 from index.forms import AccountCreationFrom, PhotoCreationForm
 from django.forms.models import inlineformset_factory
 
-from photos.socialApplication import uploadPhoto
+from photos.socialApplication import uploadPhoto, deletePhoto
 # Create your views here.
 
 @login_required
@@ -30,7 +30,6 @@ def users(request):
         if formset.is_valid():
             photoList = formset.save(commit=False)
             for photo in photoList:
-                print photo.title
                 photo.save()
                 response = uploadPhoto(photo)
             return redirect(reverse('users:profile'))
@@ -64,7 +63,9 @@ def logout(request):
 def delete_photo(request, delete_id):
     if delete_id != '':
         try:
-            Photo.objects.filter(id=long(delete_id)).delete()
+            photo = Photo.objects.get(id=long(delete_id))
+            deletePhoto(photo)
+            photo.delete()
             print('Photo id %ld deletes successfully!' % long(delete_id))
         except Photo.DoesNotExist:
             print('Photo id %ld does not exist!' % long(delete_id))
