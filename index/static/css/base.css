@@ -34,8 +34,6 @@ body > .container {
   padding-left: 15px;
 }
 
-#alert-modal {
+#modal-body {
   color: white;
-  background-color: #f04124;
-  border-bottom: 1px solid #f04124;
 }

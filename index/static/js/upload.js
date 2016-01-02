@@ -17,15 +17,15 @@ function checkImgNumber(action) {
             $('#image-Modal').modal('toggle');
         }
         else{
-            showMsgModal('Max photo number is five!');
+            showMsgModal('Max photo number is five!', 'danger');
         }
     }
     else if(action == 'submit'){
         if(imgNumber == 0){
-            showMsgModal('At least submit one photo!');
+            showMsgModal('At least submit one photo!', 'danger');
             return false;
         }
-        showMsgModal('Photos are uploading...');
+        showMsgModal('Photos are uploading...', 'success');
     }
 }
 
