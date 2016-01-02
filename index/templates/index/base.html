@@ -10,6 +10,7 @@
     <link rel="stylesheet" href={% static "css/base.css" %} media="screen">
     <script src={% static "js/jquery-2.1.4.min.js" %}></script>
     <script src={% static "js/bootstrap.min.js" %}></script>
+
     <script type="text/javascript">
         //show msg modal
         function showMsgModal(msg, classType){
@@ -36,13 +37,16 @@
                 $('#modal-body').css('border-bottom', '1px solid #ea2f10');
             }
         }
-
     </script>
+    <style type="text/css">
+      @import url(http://weloveiconfonts.com/api/?family=entypo);
+    </style>
     {% block import_source %}
     {% endblock import_source %}
   </head>
   <body>
     {% include "index/navbar.html" %}
+    {% include "index/sidebar.html" %}
     <center>
       <!-- Modal -->
       <div class="modal fade" id="msg-Modal" role="dialog">
