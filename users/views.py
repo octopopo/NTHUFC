@@ -1,3 +1,5 @@
+#coding=utf-8
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
@@ -5,7 +7,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from users.forms import LoginForm
 from django.core.urlresolvers import reverse
-from photos.models import Photo
+from photos.models import Photo,Tag
 from users.models import Account
 from index.forms import AccountCreationFrom, PhotoCreationForm
 from django.forms.models import inlineformset_factory
@@ -36,8 +38,17 @@ def users(request):
     else:
         #form = AccountCreationFrom(instance=account, prefix="main")
         formset = PhotoInlineFormSet(instance=account, prefix="nested")
-
-    return render(request, "users/profile.html", {"photos": photos, "formset": formset, "marker_list": Marker.objects.all()})
+        all_tags = Tag.objects.all()
+        hot_tags = Tag.objects.order_by('-tag_count')[:5]
+        recent_tags = Tag.objects.order_by('-update_time')[:5]
+        return render(request, "users/profile.html", {
+            "photos": photos,
+            "formset": formset,
+            "marker_list": Marker.objects.all(),
+            "all_tags":[ x.tag_name for x in all_tags],
+            "hot_tags":[ x.tag_name for x in hot_tags],
+            "recent_tags":[ x.tag_name for x in recent_tags],
+        })
 
 def login(request):
     F = LoginForm
