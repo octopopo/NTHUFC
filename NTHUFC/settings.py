@@ -69,6 +69,7 @@ WSGI_APPLICATION = 'NTHUFC.wsgi.application'
 
 CONFIG_PATH = os.path.join(BASE_DIR, 'NTHUFC/config/NTHUFC.cfg')
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -77,6 +78,7 @@ DATABASES = {
         },
     }
 };
+
 '''
 DATABASES = {
     'default': {
